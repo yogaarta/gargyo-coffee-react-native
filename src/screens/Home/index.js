@@ -30,7 +30,7 @@ export default function Home({ navigation }) {
               <Pressable style={style.buttonReg} onPress={() => navigation.navigate('Register')}>
                 <Text style={style.regText}>Create New Account</Text>
               </Pressable>
-              <Pressable style={style.button} onPress={() => navigation.navigate('')}>
+              <Pressable style={style.button} onPress={() => navigation.navigate('Login')}>
                 <Text style={style.buttonText}>Login</Text>
               </Pressable>
             </View>
