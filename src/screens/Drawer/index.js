@@ -1,12 +1,21 @@
-import { createDrawerNavigator } from '@react-navigation/drawer';
-
+import React from 'react'
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
+import { Text, View } from 'react-native';
+import style from './style';
 const Drawer = createDrawerNavigator();
 
-function MyDrawer() {
+function MyDrawer(props) {
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen name="Feed" component={Feed} />
-      <Drawer.Screen name="Article" component={Article} />
-    </Drawer.Navigator>
+    <>
+    <View style={style.container}>
+      <Text>Teks</Text>
+      {/* <DrawerContentScrollView {...props}>
+        <DrawerItemList {...props} />
+        <DrawerItem />
+      </DrawerContentScrollView> */}
+    </View>
+      </>
   );
 }
+
+export default MyDrawer

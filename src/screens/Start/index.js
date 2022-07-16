@@ -27,7 +27,8 @@ export default function Start({ navigation }) {
               <Text style={style.info}>Get a cup of coffee for free every sunday morning</Text>
             </View>
             <View style={style.btnContainer}>
-              <Pressable style={style.buttonReg} onPress={() => navigation.navigate('Register')}>
+              <Pressable style={style.buttonReg} onPress={() => navigation.navigate('Drawer')}>
+              {/* <Pressable style={style.buttonReg} onPress={() => navigation.navigate('Register')}> */}
                 <Text style={style.regText}>Create New Account</Text>
               </Pressable>
               <Pressable style={style.button} onPress={() => navigation.navigate('Login')}>
