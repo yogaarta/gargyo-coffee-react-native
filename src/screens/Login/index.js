@@ -1,5 +1,5 @@
-import { View, Text, ImageBackground, TextInput, Image, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, ImageBackground, TextInput, Image, Pressable, ToastAndroid } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { REACT_APP_BE_HOST } from '@env'
 
@@ -19,9 +19,20 @@ export default function Login({ navigation }) {
   const loginHandler = () => {
     dispatch(loginAction(body))
   }
+
+  const showToast = () => {
+    ToastAndroid.show('coba toast nih', ToastAndroid.SHORT)
+  }
+
+  useEffect(()=>{
+    if(isSuccess){
+      navigation.navigate('Drawer')
+    }
+    
+  },[isSuccess])
   return (
     <ImageBackground source={require('../../assets/img/login-bg.jpg')} style={style.imageBg}>
-      {/* {isSuccess && navigation.navigate('Home')} */}
+      
       <View style={style.imageBgClr}>
         <View style={style.titleContainer}>
           <Text style={style.title}>Login</Text>
@@ -46,7 +57,7 @@ export default function Login({ navigation }) {
             <Text style={style.infoText}>or login in with</Text>
             <View style={style.border}></View>
           </View>
-          <Pressable style={style.gbutton}>
+          <Pressable style={style.gbutton} onPress={showToast}>
             <Image source={require('../../assets/icons/google.png')} style={style.google} />
             <Text style={style.gbuttonText}>Create with Google</Text>
           </Pressable>

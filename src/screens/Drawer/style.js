@@ -50,5 +50,5 @@ export default StyleSheet.create({
     fontFamily: 'Poppins-SemiBold',
     fontSize: 17,
     color: '#6A4029'
-  }
+  },
 })
