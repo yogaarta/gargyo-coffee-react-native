@@ -1,16 +1,16 @@
-import { View, Text, Image, StyleSheet } from 'react-native'
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
 
 
-export default function ProductCard({ id, name, price, picture }) {
+export default function ProductCard({ id, name, price, picture, navigation }) {
   return (
-    <View style={style.card} key={id}>
+    <Pressable style={style.card} key={id} onPress={()=> navigation.navigate('Product', {id})}>
       <Image source={picture ? { uri: picture } : require('../assets/img/hazelnut.png')} style={style.img} />
       <View style={style.textContainer}>
         <Text style={style.name}>{name ? name : 'Hazelnut Latte'}</Text>
         <Text style={style.price}>{price ? price : 'IDR 25.000'}</Text>
       </View>
-    </View>
+    </Pressable>
   )
 }
 

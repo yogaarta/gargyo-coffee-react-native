@@ -21,7 +21,8 @@ export default function Login({ navigation }) {
   }
 
   const showToast = () => {
-    ToastAndroid.show('coba toast nih', ToastAndroid.SHORT)
+    ToastAndroid.show('gabisa login nih', ToastAndroid.SHORT)
+    navigation.navigate('Drawer')
   }
 
   useEffect(()=>{

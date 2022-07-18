@@ -4,3 +4,7 @@ export const REJECTED = "_REJECTED";
 
 export const loginString = "LOGIN"
 export const logoutString = "LOGOUT"
+
+export const getUserString = "GET_USER"
+
+export const addProductString = "ADD_PRODUCT" 
