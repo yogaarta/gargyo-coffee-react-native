@@ -26,9 +26,9 @@ export default function Home(props) {
       if (menu !== 'favorite') {
         URL += `?limit=5`
       }
-      // if(search !== ''){
-      //   URL += `&name=${search}`
-      // }
+      if(search !== ''){
+        URL += `&name=${search}`
+      }
       if (menu !== 'favorite' && menu !== 'all') {
         URL += `&category=${menu}`
       }
@@ -57,7 +57,10 @@ export default function Home(props) {
       <View style={style.searchContainer}>
         <IconIonicons name='search' size={20} color='#9F9F9F' />
         <TextInput style={style.searchInput} placeholder={'Search'} onChange={(e) => {
-          setTimeout(setSearch(e.nativeEvent.text), 3000)
+          // setTimeout(setSearch(e.nativeEvent.text), 3000)
+          // setSearch(e.nativeEvent.text)
+          // console.log(e.nativeEvent.text)
+          // (setTimeout(()=> console.log(e.nativeEvent.text)), 2000)
         }} />
       </View>
       <ScrollView horizontal={true} style={style.scrollViewH} showsHorizontalScrollIndicator={false}>

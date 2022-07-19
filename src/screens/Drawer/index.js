@@ -20,10 +20,10 @@ function MyDrawer(props) {
           <Text style={style.email}>zulaikha17@gmail.com</Text>
         </View>
         <View style={style.menuContainer}>
-          <View style={style.menuList}>
+          <Pressable style={style.menuList} onPress={()=> props.navigation.navigate('Profile')}>
             <Ionicons name='person-circle-outline' size={35} color='#6A4029' />
             <Text style={style.menuText}>Edit Profile</Text>
-          </View>
+          </Pressable>
           <View style={style.menuList}>
             <Material name='cart-arrow-down' size={35} color='#6A4029' />
             <Text style={style.menuText}>Orders</Text>
