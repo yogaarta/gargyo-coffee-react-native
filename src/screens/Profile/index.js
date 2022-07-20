@@ -1,10 +1,12 @@
 import { View, Text, Image, Pressable } from 'react-native'
 import React from 'react'
+import { useSelector } from 'react-redux'
 import Awesome5 from 'react-native-vector-icons/FontAwesome5'
 import Header from '../../components/Header'
 import style from './style'
 
 export default function Profile(props) {
+  const { userData } = useSelector(state => state.user)
   return (
     <>
       <Header {...props} />
@@ -12,20 +14,20 @@ export default function Profile(props) {
         <Text style={style.title}>My Profile</Text>
         <View style={style.subtitleContainer}>
           <Text style={style.subtitle}>Your Information</Text>
-          <Text style={style.edit} onPress={()=> props.navigation.navigate('EditProfile')}>edit</Text>
+          <Text style={style.edit} onPress={() => props.navigation.navigate('EditProfile')}>edit</Text>
         </View>
         <View style={style.card}>
-          <Image source={require('../../assets/img/profpict.png')} style={style.profpict} />
+          <Image source={userData.profile_picture ? {uri: userData.profile_picture} : require('../../assets/img/profpict.png')} style={style.profpict} />
           <View style={style.info}>
-            <Text style={style.name}>Display Name</Text>
-            <Text style={style.email}>zulaikha17@gmail.com</Text>
+            <Text style={style.name}>{userData.display_name ? userData.display_name : 'Display Name'}</Text>
+            <Text style={style.email}>{userData.email}</Text>
             <View style={style.border}></View>
-            <Text style={style.email}>+62 81348287878</Text>
+            <Text style={style.email}>{userData.mobile_number}</Text>
             <View style={style.border}></View>
-            <Text style={style.email}>Iskandar Street Block A Number 102</Text>
+            <Text style={style.email}>{userData.address ? userData.address : 'Your Address'}</Text>
           </View>
         </View>
-        <Pressable style={style.menuCard} onPress={()=> props.navigation.navigate('History')}>
+        <Pressable style={style.menuCard} onPress={() => props.navigation.navigate('History')}>
           <Text style={style.menu}>Order History</Text>
           <Awesome5 name='chevron-right' size={20} />
         </Pressable>

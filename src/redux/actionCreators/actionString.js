@@ -8,3 +8,4 @@ export const logoutString = "LOGOUT"
 export const getUserString = "GET_USER"
 
 export const addProductString = "ADD_PRODUCT" 
+export const clearCartString = "CLEAR_CART"

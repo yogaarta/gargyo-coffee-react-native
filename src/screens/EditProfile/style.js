@@ -46,6 +46,12 @@ export default StyleSheet.create({
     height: 25,
     color: '#000000'
   },
+  dateInput: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: 20
+  },
   border: {
     borderBottomWidth: 1,
     borderColor: '#9f9f9f'

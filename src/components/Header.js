@@ -16,8 +16,8 @@ export default function Header({navigation}) {
       {/* <Text>Header</Text> */}
       <View style={{display: 'flex', flexDirection: 'row', flex: 2, justifyContent: 'space-between'}}>
         <IconIonicons name='chatbubble-outline' size={30} color='#9F9F9F' />
-        <IconIonicons name='search' size={30} color='#9F9F9F'/>
-        <IconIonicons name='cart-outline' size={30} color='#9F9F9F'/>
+        <IconIonicons name='search' size={30} color='#9F9F9F' onPress={()=> navigation.navigate('AllProduct', {category: 'all'})}/>
+        <IconIonicons name='cart-outline' size={30} color='#9F9F9F' onPress={() => navigation.navigate('Cart')}/>
       </View>
     </View>
   )

@@ -134,4 +134,27 @@ export default StyleSheet.create({
     fontSize: 16,
     color: '#895537'
   },
+  title: {
+    fontFamily: 'Poppins-ExtraBold',
+    fontSize: 28,
+    color: '#000000',
+    textAlign: 'center',
+    marginVertical: 20
+  },
+  orderBtn: {
+    backgroundColor: '#6A4029',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    height: 50,
+    width: '70%',
+    borderRadius: 10,
+    marginVertical: 20
+  },
+  orderTxt: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 17,
+    color: '#ffffff'
+  }
 })

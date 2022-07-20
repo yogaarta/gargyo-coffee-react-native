@@ -10,11 +10,12 @@ import { addProductAction } from '../../redux/actionCreators/cart'
 export default function Delivery(props) {
   const [delivery, setDelivery] = useState('')
   const { product } = useSelector(state => state.cart)
+  const { userData } = useSelector(state => state.user)
 
   const dispatch = useDispatch()
 
   const proceedHandler = () => {
-    const newProduct = {...product, delivery}
+    const newProduct = { ...product, delivery }
     dispatch(addProductAction(newProduct))
     props.navigation.navigate('Payment')
   }
@@ -29,11 +30,11 @@ export default function Delivery(props) {
           <Text style={style.change}>change</Text>
         </View>
         <View style={style.addressCard}>
-          <Text style={style.address}>Iskandar Street</Text>
+          <Text style={style.address}>{userData.address ? userData.address : 'Iskandar Street'}</Text>
           <View style={style.border}></View>
-          <Text style={style.phone}>Km 5 refinery road oppsite republic road, effurun, Jakarta</Text>
+          <Text style={style.phone}></Text>
           <View style={style.border}></View>
-          <Text style={style.phone}>+62 81348287878</Text>
+          <Text style={style.phone}>{userData.mobile_number}</Text>
         </View>
         <View style={style.subtitleContainer}>
           <Text style={style.subtitle}>Delivery methods</Text>

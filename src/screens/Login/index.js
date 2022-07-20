@@ -1,11 +1,12 @@
-import { View, Text, ImageBackground, TextInput, Image, Pressable, ToastAndroid } from 'react-native'
+import { View, Text, ImageBackground, TextInput, Image, Pressable, ToastAndroid, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import Toast from 'react-native-toast-message'
 import { REACT_APP_BE_HOST } from '@env'
 
 import style from './style'
 import { doLogin } from '../../modules/auth'
-import { loginAction } from '../../redux/actionCreators/auth'
+import { loginAction, logoutAction } from '../../redux/actionCreators/auth'
 
 export default function Login({ navigation }) {
   const [body, setBody] = useState({
@@ -14,7 +15,7 @@ export default function Login({ navigation }) {
   })
   // const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
-  const { userInfo, isLoading, isSuccess } = useSelector(state => state.auth)
+  const { userInfo, isLoading, isSuccess, err } = useSelector(state => state.auth)
 
   const loginHandler = () => {
     dispatch(loginAction(body))
@@ -24,16 +25,36 @@ export default function Login({ navigation }) {
     ToastAndroid.show('gabisa login nih', ToastAndroid.SHORT)
     navigation.navigate('Drawer')
   }
+  const successToast = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Login Success'
+    })
+  }
+  const errorToast = () => {
+    Toast.show({
+      type: 'error',
+      text1: err.msg
+    })
+  }
 
-  useEffect(()=>{
-    if(isSuccess){
+
+  // useEffect(() => {
+  //   dispatch(logoutAction())
+  // }, [])
+
+  useEffect(() => {
+    if (isSuccess) {
+      successToast()
       navigation.navigate('Drawer')
     }
-    
-  },[isSuccess])
+    if (isSuccess === false) {
+      errorToast()
+    }
+  }, [isSuccess])
   return (
     <ImageBackground source={require('../../assets/img/login-bg.jpg')} style={style.imageBg}>
-      
+
       <View style={style.imageBgClr}>
         <View style={style.titleContainer}>
           <Text style={style.title}>Login</Text>
@@ -45,14 +66,20 @@ export default function Login({ navigation }) {
           <TextInput style={style.input} placeholder='Enter your password' placeholderTextColor='#cccccc' secureTextEntry={true}
             onChange={(e) => { setBody({ ...body, pass: e.nativeEvent.text }) }}
           />
-          <Pressable onPress={()=> navigation.navigate('Forgot')}>
+          <Pressable onPress={() => navigation.navigate('Forgot')}>
             <Text style={style.forgot}>Forgot password?</Text>
           </Pressable>
-          <Pressable style={style.loginBtn}
-            onPress={loginHandler}
-          >
-            <Text style={style.loginText}>{isLoading ? 'Loading..' : 'Login'}</Text>
-          </Pressable>
+          {isLoading ?
+            <Pressable style={style.loginBtn}>
+              <ActivityIndicator />
+            </Pressable>
+            :
+            <Pressable style={style.loginBtn}
+              onPress={loginHandler}
+            >
+              <Text style={style.loginText}>{isLoading ? 'Loading..' : 'Login'}</Text>
+            </Pressable>
+          }
           <View style={style.info}>
             <View style={style.border}></View>
             <Text style={style.infoText}>or login in with</Text>

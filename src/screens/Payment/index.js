@@ -1,23 +1,30 @@
-import { View, Text, Pressable, Image } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, Pressable, Image, ActivityIndicator } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import Toast from 'react-native-toast-message'
 import { REACT_APP_BE_HOST } from '@env'
 import style from './style'
 import Octicons from 'react-native-vector-icons/Octicons'
 import Header from '../../components/Header'
 import { currencyFormatter } from '../../helpers/formatter'
+import { clearCartAction } from '../../redux/actionCreators/cart'
 import axios from 'axios'
 
 export default function Payment(props) {
   const [payment, setPayment] = useState('')
   const [loading, setLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(null)
   const { product } = useSelector(state => state.cart)
   const { token } = useSelector(state => state.auth.userInfo)
   const { id } = useSelector(state => state.user.userData)
 
+
+  const dispatch = useDispatch()
+
   const paymentHandler = async () => {
     try {
       setLoading(true)
+      setIsSuccess(null)
       const body = {
         product_id: product.id,
         total_price: product.subtotal,
@@ -30,15 +37,40 @@ export default function Payment(props) {
       const config = { headers: { Authorization: `Bearer ${token}` } }
       const response = await axios.post(`${REACT_APP_BE_HOST}/transactions`, body, config)
       console.log(response)
+      setIsSuccess(true)
       console.log('SUCCESS')
+      dispatch(clearCartAction())
+      props.navigation.navigate("Home")
       setLoading(false)
     } catch (error) {
       console.log(error)
+      setIsSuccess(false)
       console.log('ERROR')
       setLoading(false)
     }
   }
-  const dispatch = useDispatch()
+
+  const successToast = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Transaction Success'
+    })
+  }
+  const errorToast = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Network Error',
+      text2: 'Please Check Your Connection'
+    })
+  }
+  useEffect(()=>{
+    if(isSuccess){
+      successToast()
+    }
+    if(isSuccess === false){
+      errorToast()
+    }
+  },[isSuccess])
   return (
     <>
       <Header {...props} />
@@ -76,7 +108,11 @@ export default function Payment(props) {
           <Text style={style.subtitle}>{currencyFormatter.format(product.subtotal)}</Text>
         </View>
         <Pressable style={style.paymentBtn} onPress={paymentHandler}>
-          <Text style={style.paymentTxt}>Proceed payment</Text>
+          {loading ?
+            <ActivityIndicator />
+            :
+            <Text style={style.paymentTxt}>Proceed payment</Text>
+          }
         </Pressable>
       </View>
     </>

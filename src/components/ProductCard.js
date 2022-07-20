@@ -1,5 +1,6 @@
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
+import { currencyFormatter } from '../helpers/formatter'
 
 
 export default function ProductCard({ id, name, price, picture, navigation }) {
@@ -8,7 +9,7 @@ export default function ProductCard({ id, name, price, picture, navigation }) {
       <Image source={picture ? { uri: picture } : require('../assets/img/hazelnut.png')} style={style.img} />
       <View style={style.textContainer}>
         <Text style={style.name}>{name ? name : 'Hazelnut Latte'}</Text>
-        <Text style={style.price}>{price ? price : 'IDR 25.000'}</Text>
+        <Text style={style.price}>{price ? currencyFormatter.format(price) : 'IDR 25.000'}</Text>
       </View>
     </Pressable>
   )
@@ -22,7 +23,8 @@ const style = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginRight: 20
+    marginRight: 20,
+    marginVertical: 10
   },
   img: {
     width: 130,

@@ -45,7 +45,7 @@ export default function ProductDetail(props) {
       <View style={style.container}>
         <Image source={product.picture ? { uri: product.picture } : require('../../assets/img/hazelnut.png')} style={style.img} />
         <Text style={style.name}>{product.name ? product.name : 'Cold Brew'}</Text>
-        <Text style={style.price}>{product.price ? product.price : 'IDR 30.000'}</Text>
+        <Text style={style.price}>{product.price ? currencyFormatter.format(product.price) : 'IDR 30.000'}</Text>
         <View>
           <Text style={style.descTitle}>Description</Text>
           <Text style={style.desc}>{product.description ? product.description : 'Description space'}</Text>

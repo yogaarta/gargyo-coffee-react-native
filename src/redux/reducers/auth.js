@@ -17,7 +17,7 @@ const authReducer = (prevState = initialState, action) => {
             return { ...prevState, isLoading: false, userInfo: action.payload.data.data, isSuccess: true, isLoggedIn: true }
 
         case loginString + REJECTED:
-            return { ...prevState, err: action.payload.response.data, isLoading: false, isSuccess: false }
+            return { ...prevState, err: action.payload.response.data.err, isLoading: false, isSuccess: false }
         
         case logoutString:
             return initialState

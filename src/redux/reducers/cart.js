@@ -1,4 +1,4 @@
-import { addProductString } from "../actionCreators/actionString";
+import { addProductString, clearCartString } from "../actionCreators/actionString";
 
 const initialState = {
   product: {},
@@ -12,6 +12,8 @@ const cartReducer = (prevState = initialState, action) => {
   switch (action.type) {
     case addProductString:
       return {...prevState, product: action.payload}
+    case clearCartString:
+      return initialState
     default:
       return prevState
   }

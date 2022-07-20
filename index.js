@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as ReduxProvider } from "react-redux"
 import { store, persistor } from "./src/redux/store"
 import { PersistGate } from "redux-persist/integration/react";
+import Toast from 'react-native-toast-message'
 
 import { AppRegistry } from 'react-native';
 import App from './src';
@@ -16,6 +17,7 @@ const AppWithRouter = () => (
       <SafeAreaProvider>
         <NavigationContainer>
           <App />
+          <Toast />
         </NavigationContainer>
       </SafeAreaProvider>
     </PersistGate>
