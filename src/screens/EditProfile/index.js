@@ -1,6 +1,6 @@
-import { View, Text, Image, TextInput, Pressable } from 'react-native'
+import { View, Text, Image, TextInput, Pressable, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import DatePicker from 'react-native-date-picker'
 import { REACT_APP_BE_HOST } from '@env'
 import Toast from 'react-native-toast-message'
@@ -12,6 +12,7 @@ import Header from '../../components/Header'
 import style from './style'
 import moment from 'moment'
 import axios from 'axios'
+import { getUserAction } from '../../redux/actionCreators/user'
 
 
 const options = {
@@ -26,6 +27,8 @@ const options = {
 export default function EditProfile(props) {
   const [date, setDate] = useState(new Date())
   const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
   const [gender, setGender] = useState('')
   const [data, setData] = useState({})
   // const [body, setBody] = useState({...userData})
@@ -38,6 +41,7 @@ export default function EditProfile(props) {
     address: '',
     birthday: '',
   })
+  const dispatch = useDispatch()
   const { userData } = useSelector(state => state.user)
   const { userInfo } = useSelector(state => state.auth)
 
@@ -120,6 +124,7 @@ export default function EditProfile(props) {
 
   const updateHandler = async () => {
     try {
+      setLoading(true)
       const { mobile_number, display_name, address, birthday, gender, profile_picture, email } = body
       let newBody = new FormData()
       newBody.append('profile_picture', profile_picture);
@@ -134,12 +139,21 @@ export default function EditProfile(props) {
       const response = await axios.patch(`${REACT_APP_BE_HOST}/users`, newBody, config)
       console.log(response)
       console.log('SUCCESS')
+      setIsSuccess(true)
       successToast()
+      setLoading(false)
+      props.navigation.navigate('Profile')
     } catch (error) {
       console.log('FAILED')
       console.log(error)
+      setLoading(false)
     }
   }
+  useEffect(() => {
+    if(isSuccess){
+      dispatch(getUserAction(userInfo.token))
+    }
+  }, [isSuccess])
   return (
     <>
       <Header {...props} />
@@ -196,11 +210,17 @@ export default function EditProfile(props) {
           <TextInput placeholder='Input Your Address' style={style.input} value={body.address} onChange={(e) => setBody({ ...body, address: e.nativeEvent.text })} />
           <View style={style.border}></View>
         </View>
+        {loading ? 
+        <Pressable style={style.saveBtn}>
+          <ActivityIndicator />
+        </Pressable>
+        :
         <Pressable style={style.saveBtn} onPress={updateHandler}>
           <Text style={style.saveTxt}>
             Save and Update
           </Text>
         </Pressable>
+        }
       </View>
       <Toast />
     </>

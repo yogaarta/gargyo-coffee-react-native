@@ -2,6 +2,7 @@ import { View, Text, ImageBackground, TextInput, Image, Pressable, ToastAndroid,
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { REACT_APP_BE_HOST } from '@env'
 
 import style from './style'
@@ -9,11 +10,11 @@ import { doLogin } from '../../modules/auth'
 import { loginAction, logoutAction } from '../../redux/actionCreators/auth'
 
 export default function Login({ navigation }) {
+  const [showPass, setShowPass] = useState(false)
   const [body, setBody] = useState({
     email: '',
     pass: ''
   })
-  // const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
   const { userInfo, isLoading, isSuccess, err } = useSelector(state => state.auth)
 
@@ -63,9 +64,12 @@ export default function Login({ navigation }) {
           <TextInput style={style.input} placeholder='Enter your email address' placeholderTextColor='#cccccc'
             onChange={(e) => { setBody({ ...body, email: e.nativeEvent.text }) }}
           />
-          <TextInput style={style.input} placeholder='Enter your password' placeholderTextColor='#cccccc' secureTextEntry={true}
+          <View style={style.passContainer}>
+          <TextInput style={style.inputPass} placeholder='Enter your password' placeholderTextColor='#cccccc' secureTextEntry={showPass ? false : true}
             onChange={(e) => { setBody({ ...body, pass: e.nativeEvent.text }) }}
           />
+<Ionicons name={showPass ? 'eye-outline' : 'eye-off-outline'} style={style.eye} onPress={() => setShowPass(!showPass)} />
+          </View>
           <Pressable onPress={() => navigation.navigate('Forgot')}>
             <Text style={style.forgot}>Forgot password?</Text>
           </Pressable>

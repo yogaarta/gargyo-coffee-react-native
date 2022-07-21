@@ -38,10 +38,11 @@ export default function Payment(props) {
       const response = await axios.post(`${REACT_APP_BE_HOST}/transactions`, body, config)
       console.log(response)
       setIsSuccess(true)
+      successToast()
       console.log('SUCCESS')
       dispatch(clearCartAction())
-      props.navigation.navigate("Home")
       setLoading(false)
+      props.navigation.navigate("Home")
     } catch (error) {
       console.log(error)
       setIsSuccess(false)

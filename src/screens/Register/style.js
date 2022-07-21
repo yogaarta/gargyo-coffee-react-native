@@ -38,6 +38,13 @@ export default StyleSheet.create({
     borderBottomWidth: 2,
     alignSelf: 'center',
   },
+  inputPass: {
+    width: '80%',
+    fontFamily: 'Poppins-Bold',
+    color: '#ffffff',
+    fontSize: 14,
+    alignSelf: 'center',
+  },
   button: {
     backgroundColor: '#6A4029',
     width: '80%',
@@ -77,5 +84,19 @@ export default StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontSize: 17
   },
+  passContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomColor: '#ffffff',
+    borderBottomWidth: 2,
+    alignSelf: 'center',
+    width: '80%'
+  },
+  eye: {
+    color: '#ffffff',
+    fontSize: 25
+  }
 
 })
