@@ -1,5 +1,5 @@
 import { View, Text, Image, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Header from '../../components/Header'
@@ -23,6 +23,7 @@ export default function Cart(props) {
   const checkoutHandler = () => {
     const newProduct = { ...product, subtotal, promo, quantity }
     dispatch(addProductAction(newProduct))
+    setQuantity(1)
     props.navigation.navigate('Delivery')
   }
   return (

@@ -14,7 +14,7 @@ export default StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 75,
-    resizeMode: 'center',
+    resizeMode: 'cover',
     alignSelf: 'center'
   },
   pencilContainer: {

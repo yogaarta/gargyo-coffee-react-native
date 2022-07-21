@@ -98,7 +98,9 @@ export default function Home(props) {
   }, [menu])
 
   useEffect(() => {
-    dispatch(getUserAction(userInfo.token))
+    if(userInfo.token){
+      dispatch(getUserAction(userInfo.token))
+    }
   }, [])
 
   // console.log(product)

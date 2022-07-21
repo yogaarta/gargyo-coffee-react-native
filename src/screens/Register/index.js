@@ -4,6 +4,7 @@ import Toast from 'react-native-toast-message'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import style from './style'
 import { doRegister } from '../../modules/auth'
+import { sendLocalNotification } from '../../helpers/notification'
 
 
 export default function Register({ navigation }) {
@@ -88,7 +89,7 @@ export default function Register({ navigation }) {
               <Text style={style.buttonText}>Create Account</Text>
             </Pressable>
           }
-          <Pressable style={style.gbutton}>
+          <Pressable style={style.gbutton} onPress={()=> sendLocalNotification('Local Notification', 'Congrats Your Notification can be used!')}>
             <Image source={require('../../assets/icons/google.png')} style={style.google} />
             <Text style={style.gbuttonText}>Create with Google</Text>
           </Pressable>

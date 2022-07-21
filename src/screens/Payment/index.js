@@ -9,14 +9,15 @@ import Header from '../../components/Header'
 import { currencyFormatter } from '../../helpers/formatter'
 import { clearCartAction } from '../../redux/actionCreators/cart'
 import axios from 'axios'
+import { sendLocalNotification } from '../../helpers/notification'
 
 export default function Payment(props) {
   const [payment, setPayment] = useState('')
   const [loading, setLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(null)
   const { product } = useSelector(state => state.cart)
-  const { token } = useSelector(state => state.auth.userInfo)
-  const { id } = useSelector(state => state.user.userData)
+  const { userInfo } = useSelector(state => state.auth)
+  const { userData } = useSelector(state => state.user)
 
 
   const dispatch = useDispatch()
@@ -29,16 +30,16 @@ export default function Payment(props) {
         product_id: product.id,
         total_price: product.subtotal,
         quantity: product.quantity,
-        user_id: id,
+        user_id: userData.id,
         payment_method: payment,
         delivery_method: product.delivery,
         promo_id: product.promo
       }
-      const config = { headers: { Authorization: `Bearer ${token}` } }
+      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } }
       const response = await axios.post(`${REACT_APP_BE_HOST}/transactions`, body, config)
       console.log(response)
       setIsSuccess(true)
-      successToast()
+      sendLocalNotification('Payment Success!', `${userData.display_name}, thank you for purchasing ${product.name} in our store!`)
       console.log('SUCCESS')
       dispatch(clearCartAction())
       setLoading(false)
