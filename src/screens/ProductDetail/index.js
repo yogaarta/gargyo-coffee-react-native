@@ -1,6 +1,6 @@
 import { View, Text, Image, Pressable, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import Toast from 'react-native-toast-message'
 import { REACT_APP_BE_HOST } from '@env'
@@ -15,6 +15,7 @@ export default function ProductDetail(props) {
   const [size, setSize] = useState('')
   console.log(props.route.params.id)
   const dispatch = useDispatch()
+  const { userData } = useSelector(state => state.user)
 
   const getProductDetail = async () => {
     try {
@@ -73,9 +74,15 @@ export default function ProductDetail(props) {
               <Text style={size === 'XL' ? style.sizeTextActive : style.sizeText} onPress={() => setSize('XL')}>XL</Text>
             </View>
           </View>
+          {userData.roles === 'admin' ? 
+          <Pressable style={style.btnContainer} onPress={addCartHandler}>
+            <Text style={style.btnText}>Edit Product</Text>
+          </Pressable>
+          :
           <Pressable style={style.btnContainer} onPress={addCartHandler}>
             <Text style={style.btnText}>Add to cart</Text>
           </Pressable>
+          }
         </View>
       }
     </>

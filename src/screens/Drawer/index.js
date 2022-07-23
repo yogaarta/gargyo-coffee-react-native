@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Material from 'react-native-vector-icons/MaterialCommunityIcons'
 import Awesome5 from 'react-native-vector-icons/FontAwesome5'
+import Awesome from 'react-native-vector-icons/FontAwesome'
 import style from './style';
 import { logoutAction } from '../../redux/actionCreators/auth';
 const Drawer = createDrawerNavigator();
@@ -16,11 +17,20 @@ function MyDrawer(props) {
     <>
       <View style={style.container}>
         <View style={style.profileContainer}>
-          <Image source={userData.profile_picture ? {uri: userData.profile_picture} : require('../../assets/img/profpict.png')} style={style.profpict} />
+          <Image source={userData.profile_picture ? { uri: userData.profile_picture } : require('../../assets/img/profpict.png')} style={style.profpict} />
           <Text style={style.username}>{userData.display_name ? userData.display_name : 'Display Name'}</Text>
+          {userData.roles === 'admin' ?
+            <Text style={style.email}>Admin</Text>
+            :
+            <></>
+          }
           <Text style={style.email}>{userData.email}</Text>
         </View>
         <View style={style.menuContainer}>
+          <Pressable style={style.menuList} onPress={() => props.navigation.navigate('Home')}>
+            <Awesome5 name='home' size={35} color='#6A4029' />
+            <Text style={style.menuText}>Home</Text>
+          </Pressable>
           <Pressable style={style.menuList} onPress={() => props.navigation.navigate('Profile')}>
             <Ionicons name='person-circle-outline' size={35} color='#6A4029' />
             <Text style={style.menuText}>Profile</Text>
@@ -29,22 +39,29 @@ function MyDrawer(props) {
             <Material name='cart-arrow-down' size={35} color='#6A4029' />
             <Text style={style.menuText}>Orders</Text>
           </Pressable>
-          <Pressable style={style.menuList} onPress={()=> props.navigation.navigate('AllProduct', {category: 'all'})}>
+          <Pressable style={style.menuList} onPress={() => props.navigation.navigate('AllProduct', { category: 'all' })}>
             <Ionicons name='fast-food-outline' size={35} color='#6A4029' />
             <Text style={style.menuText}>All menu</Text>
           </Pressable>
-          <View style={style.menuList}>
-            <Ionicons name='newspaper-outline' size={35} color='#6A4029' />
-            <Text style={style.menuText}>Privacy policy</Text>
-          </View>
-          <View style={style.menuList}>
+          {userData.roles === 'admin' ?
+            <View style={style.menuList}>
+              <Material name='newspaper-variant-outline' size={35} color='#6A4029' />
+              <Text style={style.menuText}>Sales Report</Text>
+            </View>
+            :
+            <View style={style.menuList}>
+              <Ionicons name='newspaper-outline' size={35} color='#6A4029' />
+              <Text style={style.menuText}>Privacy policy</Text>
+            </View>
+          }
+          {/* <View style={style.menuList}>
             <Awesome5 name='shield-alt' size={35} color='#6A4029' />
             <Text style={style.menuText}>Security</Text>
-          </View>
+          </View> */}
         </View>
         <Pressable style={style.menuList} onPress={() => {
           dispatch(logoutAction())
-          props.navigation.navigate("Start")
+          props.navigation.replace("Login")
         }}>
           <Material name='logout' size={35} color='#6A4029' />
           <Text style={style.menuText}>Logout</Text>

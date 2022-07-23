@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ScrollView, FlatList, ActivityIndicator } from 'react-native'
+import { View, Text, TextInput, ScrollView, FlatList, ActivityIndicator, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import IconIonicons from 'react-native-vector-icons/Ionicons'
@@ -17,57 +17,55 @@ export default function Home(props) {
   const [coffee, setCoffee] = useState([])
   const [nonCoffee, setNonCoffee] = useState([])
   const [food, setFood] = useState([])
-  const [loading, setLoading] = useState({
-    all: false,
-    coffee: false,
-    nonCoffee: false,
-    food: false,
-    favorite: false
-  })
+  const [loading, setLoading] = useState(false)
+  const [loadingCoffee, setLoadingCoffee] = useState(false)
+  const [loadingNonCoffee, setLoadingNonCoffee] = useState(false)
+  const [loadingFood, setLoadingFood] = useState(false)
 
   const { userInfo } = useSelector(state => state.auth)
+  const { userData } = useSelector(state => state.user)
   const dispatch = useDispatch()
 
   const getNonCoffee = async () => {
     try {
-      setLoading({ ...loading, nonCoffee: true })
+      setLoadingNonCoffee(true)
       let URL = `${REACT_APP_BE_HOST}/products?category=noncoffee&limit=5`
       const response = await axios.get(URL)
       setNonCoffee(response.data.data)
-      setLoading({ ...loading, nonCoffee: false })
+      setLoadingNonCoffee(false)
     } catch (error) {
       console.log(error)
-      setLoading({ ...loading, nonCoffee: false })
+      setLoadingNonCoffee(false)
     }
   }
   const getCoffee = async () => {
     try {
-      setLoading({ ...loading, coffee: true })
+      setLoadingCoffee(true)
       let URL = `${REACT_APP_BE_HOST}/products?category=coffee&limit=5`
       const response = await axios.get(URL)
       setCoffee(response.data.data)
-      setLoading({ ...loading, coffee: false })
+      setLoadingCoffee(false)
     } catch (error) {
       console.log(error)
-      setLoading({ ...loading, coffee: false })
+      setLoadingCoffee(false)
     }
   }
   const getFood = async () => {
     try {
-      setLoading({ ...loading, food: true })
+      setLoadingFood(true)
       let URL = `${REACT_APP_BE_HOST}/products?category=coffee&limit=5`
       const response = await axios.get(URL)
       setFood(response.data.data)
-      setLoading({ ...loading, food: false })
+      setLoadingFood(false)
     } catch (error) {
       console.log(error)
-      setLoading({ ...loading, food: false })
+      setLoadingFood(false)
     }
   }
 
   const getProduct = async () => {
     try {
-      setLoading({ ...loading, all: true })
+      setLoading(true)
       let URL = `${REACT_APP_BE_HOST}/products`
       if (menu === 'favorite') {
         URL += '/favorite'
@@ -83,10 +81,10 @@ export default function Home(props) {
       }
       const response = await axios.get(URL)
       setProduct(response.data.data)
-      setLoading({ ...loading, all: false })
+      setLoading(false)
     } catch (error) {
       console.log(error)
-      setLoading({ ...loading, all: false })
+      setLoading(false)
     }
   }
 
@@ -98,7 +96,7 @@ export default function Home(props) {
   }, [menu])
 
   useEffect(() => {
-    if(userInfo.token){
+    if (userInfo.token) {
       dispatch(getUserAction(userInfo.token))
     }
   }, [])
@@ -110,41 +108,26 @@ export default function Home(props) {
       <View style={style.container}>
         <Text style={style.title}>A good coffee is a good day</Text>
       </View>
-      {/* <View style={style.searchContainer}>
-        <IconIonicons name='search' size={20} color='#9F9F9F' />
-        <TextInput style={style.searchInput} placeholder={'Search'} onChange={(e) => {
-          // setTimeout(setSearch(e.nativeEvent.text), 3000)
-          // setSearch(e.nativeEvent.text)
-          // console.log(e.nativeEvent.text)
-          // (setTimeout(()=> console.log(e.nativeEvent.text)), 2000)
-        }} />
-      </View>
-      <ScrollView horizontal={true} style={style.scrollViewH} showsHorizontalScrollIndicator={false}>
-        <Text style={menu === 'favorite' ? style.categoryTextAct : style.categoryText}
-          onPress={() => setMenu('favorite')}
-        >Favorite</Text>
-        <Text style={menu === 'coffee' ? style.categoryTextAct : style.categoryText}
-          onPress={() => setMenu('coffee')}
-        >Coffee</Text>
-        <Text style={menu === 'noncoffee' ? style.categoryTextAct : style.categoryText}
-          onPress={() => setMenu('noncoffee')}
-        >Non Coffee</Text>
-        <Text style={menu === 'food' ? style.categoryTextAct : style.categoryText}
-          onPress={() => setMenu('food')}
-        >Food</Text>
-        <Text style={menu === 'all' ? style.categoryTextAct : style.categoryText}
-          onPress={() => setMenu('all')}
-        >All</Text>
-      </ScrollView> */}
+
       <ScrollView style={style.productContainer} showsHorizontalScrollIndicator={false}>
+        {userData.roles === 'admin' ?
+          <View style={style.adminContainer}>
+            <Pressable style={style.adminBtn} onPress={()=> props.navigation.navigate("NewProduct")}>
+              <Text style={style.adminTxt}>New Product</Text>
+            </Pressable>
+            <Pressable style={style.adminBtn}>
+              <Text style={style.adminTxt}>New Promo</Text>
+            </Pressable>
+          </View>
+          : <></>}
         <View style={style.subtitleContainer}>
           <Text style={style.categoryTitle}>Favorite Products</Text>
-          <Text style={style.seeAll} 
-          onPress={()=> props.navigation.navigate('AllProduct', {category: 'favorite'})}
+          <Text style={style.seeAll}
+            onPress={() => props.navigation.navigate('AllProduct', { category: 'favorite' })}
           >See more</Text>
         </View>
-        {loading.all ?
-          <ActivityIndicator size={'large'} style={style.loading}/>
+        {loading ?
+          <ActivityIndicator size={'large'} style={style.loading} />
           :
           <FlatList horizontal={true} data={product} renderItem={({ item, idx }) => (
             <ProductCard key={idx} id={item.id} name={item.name} picture={item.picture} price={item.price} {...props} />
@@ -153,11 +136,11 @@ export default function Home(props) {
         <View style={style.subtitleContainer}>
           <Text style={style.categoryTitle}>Coffee</Text>
           <Text style={style.seeAll}
-          onPress={()=> props.navigation.navigate('AllProduct', {category: 'coffee'})}
+            onPress={() => props.navigation.navigate('AllProduct', { category: 'coffee' })}
           >See more</Text>
         </View>
-        {loading.coffee ?
-          <ActivityIndicator size={'large'} style={style.loading}/>
+        {loadingCoffee ?
+          <ActivityIndicator size={'large'} style={style.loading} />
           :
           <FlatList horizontal={true} data={coffee} renderItem={({ item, idx }) => (
             <ProductCard key={idx} id={item.id} name={item.name} picture={item.picture} price={item.price} {...props} />
@@ -166,11 +149,11 @@ export default function Home(props) {
         <View style={style.subtitleContainer}>
           <Text style={style.categoryTitle}>Non Coffee</Text>
           <Text style={style.seeAll}
-          onPress={()=> props.navigation.navigate('AllProduct', {category: 'noncoffee'})}
+            onPress={() => props.navigation.navigate('AllProduct', { category: 'noncoffee' })}
           >See more</Text>
         </View>
-        {loading.nonCoffee ?
-          <ActivityIndicator size={'large'} style={style.loading}/>
+        {loadingNonCoffee ?
+          <ActivityIndicator size={'large'} style={style.loading} />
           :
           <FlatList horizontal={true} data={nonCoffee} renderItem={({ item, idx }) => (
             <ProductCard key={idx} id={item.id} name={item.name} picture={item.picture} price={item.price} {...props} />
@@ -179,18 +162,19 @@ export default function Home(props) {
         <View style={style.subtitleContainer}>
           <Text style={style.categoryTitle}>Food</Text>
           <Text style={style.seeAll}
-          onPress={()=> props.navigation.navigate('AllProduct', {category: 'food'})}
+            onPress={() => props.navigation.navigate('AllProduct', { category: 'food' })}
           >See more</Text>
         </View>
-        {loading.food ?
-          <ActivityIndicator size={'large'} style={style.loading}/>
+        {loadingFood ?
+          <ActivityIndicator size={'large'} style={style.loading} />
           :
           <FlatList horizontal={true} data={food} renderItem={({ item, idx }) => (
             <ProductCard key={idx} id={item.id} name={item.name} picture={item.picture} price={item.price} {...props} />
           )} />
         }
-        <View style={{height: 200}}></View>
+        <View style={{ height: 200 }}></View>
       </ScrollView>
+
     </View>
   )
 }

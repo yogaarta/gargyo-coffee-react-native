@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1066319755285",
+    "project_id": "gargyo-coffee",
+    "storage_bucket": "gargyo-coffee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1066319755285:android:2d11726e69ac8410bef61c",
+        "android_client_info": {
+          "package_name": "com.gargyocoffee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1066319755285-5cb8nphgh5d05ov8uervla6cueucj7nf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQaLV7sfyv2G2YN58ggYAim56J3CVm05o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1066319755285-5cb8nphgh5d05ov8uervla6cueucj7nf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

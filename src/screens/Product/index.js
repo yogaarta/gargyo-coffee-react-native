@@ -18,10 +18,10 @@ export default function AllProduct(props) {
   const [loading, setLoading] = useState(false)
   const [msg, setMsg] = useState('')
 
-  // useEffect(() => {
-  //   setMenu(props.route.params.category)
-  //   getProduct()
-  // }, [props.route.params.category])
+  useEffect(() => {
+    setMenu(props.route.params.category)
+    // getProduct()
+  }, [props.route.params.category])
   useEffect(() => {
     getProduct()
   }, [menu, search, sort, order])
@@ -37,7 +37,7 @@ export default function AllProduct(props) {
         URL += '/favorite'
       }
       if (menu !== 'favorite') {
-        URL += `?limit=${limit}`
+        URL += `?limit=${limit}&sort=${sort}&order=${order}`
       }
       if (search !== '' && menu !== 'favorite') {
         URL += `&name=${search}`
@@ -45,7 +45,7 @@ export default function AllProduct(props) {
       if (menu !== 'favorite' && menu !== 'all') {
         URL += `&category=${menu}`
       }
-      URL += `&sort=${sort}&order=${order}`
+      // URL += `&sort=${sort}&order=${order}`
       const response = await axios.get(URL)
       setProduct(response.data.data)
       setLoading(false)
@@ -87,9 +87,11 @@ export default function AllProduct(props) {
         <View style={style.searchContainer}>
           <IconIonicons name='search' size={20} color='#9F9F9F' />
           <TextInput style={style.searchInput} placeholder={'Search'} placeholderTextColor={'#9F9F9F'} onChangeText={(e) => {
-            // setTimeout(()=> setSearch(e), 2000)
-            setSearch(e)
-            // console.log(e.nativeEvent)
+            setTimeout(()=> {
+              console.log(e)
+              setSearch(e)}, 2000)
+            // setSearch(e)
+            // console.log(e.nativeEvent.text)
             // setTimeout(()=> console.log(e)), 2000
           }} />
         </View>

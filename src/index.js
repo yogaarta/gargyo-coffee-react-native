@@ -16,6 +16,7 @@ import Profile from './screens/Profile'
 import EditProfile from './screens/EditProfile'
 import History from './screens/History'
 import AllProduct from './screens/Product'
+import NewProduct from './screens/NewProduct'
 
 const Drawer = createDrawerNavigator()
 
@@ -31,6 +32,7 @@ const DrawerNav = () => {
         <Drawer.Screen name='EditProfile' component={EditProfile} options={{ headerShown: false }}/>
         <Drawer.Screen name='History' component={History} options={{ headerShown: false }}/>
         <Drawer.Screen name='AllProduct' component={AllProduct} options={{ headerShown: false }}/>
+        <Drawer.Screen name='NewProduct' component={NewProduct} options={{ headerShown: false }}/>
       </Drawer.Navigator>
   )
 }

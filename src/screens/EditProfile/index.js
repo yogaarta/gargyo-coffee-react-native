@@ -1,4 +1,4 @@
-import { View, Text, Image, TextInput, Pressable, ActivityIndicator } from 'react-native'
+import { View, Text, Image, TextInput, Pressable, ActivityIndicator, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import DatePicker from 'react-native-date-picker'
@@ -7,7 +7,7 @@ import Toast from 'react-native-toast-message'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import Header from '../../components/Header'
 import style from './style'
 import moment from 'moment'
@@ -30,6 +30,7 @@ export default function EditProfile(props) {
   const [loading, setLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [gender, setGender] = useState('')
+  const [show, setShow] = useState(false)
   const [data, setData] = useState({})
   // const [body, setBody] = useState({...userData})
   const [body, setBody] = useState({
@@ -95,7 +96,32 @@ export default function EditProfile(props) {
     //   }
     // });
     try {
+      setShow(false)
       const result = await launchImageLibrary(options)
+      setData({
+        name: result.assets[0].fileName,
+        size: result.assets[0].fileSize,
+        type: result.assets[0].type,
+        uri: result.assets[0].uri,
+        height: result.assets[0].height,
+        width: result.assets[0].width
+      })
+      console.log(result.assets[0])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const useCamera = async () => {
+    const options = {
+      selectionLimit: 1,
+      mediaType: 'photo',
+      includeBase64: false,
+    };
+
+    try {
+      setShow(false)
+      const result = await launchCamera(options)
       setData({
         name: result.assets[0].fileName,
         size: result.assets[0].fileSize,
@@ -152,7 +178,8 @@ export default function EditProfile(props) {
 
       const config = { headers: { Authorization: `Bearer ${userInfo.token}`, "content-type": "multipart/form-data" } }
       const response = await axios.patch(`${REACT_APP_BE_HOST}/users`, newBody, config)
-      console.log(response)
+      // console.log(response)
+      dispatch(getUserAction(userInfo.token))
       console.log('SUCCESS')
       setIsSuccess(true)
       successToast()
@@ -179,7 +206,7 @@ export default function EditProfile(props) {
           {/* {renderFileData()} */}
           {/* {renderFileUri()} */}
           <Image source={data.uri ? { uri: data.uri } : body.profile_picture ? { uri: body.profile_picture } : require('../../assets/img/profpict.png')} style={style.profpict} />
-          <Pressable style={style.pencilContainer} onPress={chooseImage}>
+          <Pressable style={style.pencilContainer} onPress={() => setShow(true)}>
             <SimpleLineIcons name='pencil' size={20} color={'#ffffff'} style={style.pencil} />
           </Pressable>
         </View>
@@ -240,6 +267,42 @@ export default function EditProfile(props) {
           </Pressable>
         }
       </View>
+      <Modal visible={show} transparent={true}>
+        <Pressable style={{ backgroundColor: '#000000', flex: 1, opacity: 0.5 }} onPress={() => setShow(false)}>
+        </Pressable>
+        <View style={{
+          backgroundColor: '#ffffff',
+          paddingVertical: 20,
+          paddingHorizontal: '10%',
+          position: 'relative',
+          // top: '30%', left: '20%', 
+          height: '18%', width: '100%',
+          display: 'flex', flexDirection: 'row',
+          alignItems: 'center', justifyContent: 'space-between', 
+          borderRadius: 10
+        }}>
+          <Pressable style={{
+            backgroundColor: '#FFBA33',
+            width: '30%',
+            height: 70,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center', borderRadius: 10
+          }} onPress={chooseImage}>
+            <FontAwesome name='photo' size={30} color={'#ffffff'} />
+          </Pressable>
+          <Pressable style={{
+            backgroundColor: '#6A4029',
+            width: '30%',
+            height: 70,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center', borderRadius: 10
+          }} onPress={useCamera}>
+            <FontAwesome name='camera' size={30} color={'#ffffff'} />
+          </Pressable>
+        </View>
+      </Modal>
       <Toast />
     </>
   )
