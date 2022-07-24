@@ -26,7 +26,7 @@ export default function EditProduct(props) {
   const getProductDetail = async () => {
     try {
       setLoading(true)
-      console.log(REACT_APP_BE_HOST)
+      // console.log(REACT_APP_BE_HOST)
       const id = props.route.params.id
       const response = await axios.get(`${REACT_APP_BE_HOST}/products/${id}`)
       console.log(response.data.data)

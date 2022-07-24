@@ -13,16 +13,18 @@ export default function History(props) {
   const [history, setHistory] = useState([])
   const [historyId, setHistoryId] = useState([])
   const [loading, setLoading] = useState(false)
+  // const [msg, setMsg] = useState(props.route.params.msg)
 
 
   const { userInfo } = useSelector(state => state.auth)
-
+  // console.log(REACT_APP_BE_HOST)
   const getHistory = async () => {
     try {
       setLoading(true)
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } }
       const response = await axios.get(`${REACT_APP_BE_HOST}/transactions`, config)
       setHistory(response.data.data)
+      // setMsg('Success')
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -62,7 +64,7 @@ export default function History(props) {
       setLoading(false)
     }
   }
-
+  
   useEffect(() => {
     getHistory()
   }, [])

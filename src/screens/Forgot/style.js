@@ -45,6 +45,27 @@ export default StyleSheet.create({
     borderBottomWidth: 2,
     alignSelf: 'center',
   },
+  passContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomColor: '#ffffff',
+    borderBottomWidth: 2,
+    alignSelf: 'center',
+    width: '80%'
+  },
+  inputPass: {
+    width: '80%',
+    fontFamily: 'Poppins-Bold',
+    color: '#ffffff',
+    fontSize: 14,
+    alignSelf: 'center',
+  },
+  eye: {
+    color: '#ffffff',
+    fontSize: 25
+  },
   button: {
     backgroundColor: '#6A4029',
     width: '80%',

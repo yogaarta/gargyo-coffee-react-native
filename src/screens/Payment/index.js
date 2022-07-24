@@ -75,7 +75,7 @@ export default function Payment(props) {
       setLoading(false)
     }
   }
-
+  // console.log(REACT_APP_BE_HOST)
   useEffect(() => {
     if (isSuccess) {
       successToast()

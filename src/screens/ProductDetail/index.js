@@ -52,7 +52,7 @@ export default function ProductDetail(props) {
     props.navigation.navigate("Cart")
   }
 
-  console.log(REACT_APP_BE_HOST)
+  // console.log(REACT_APP_BE_HOST)
   return (
     <>
       <Header {...props} />

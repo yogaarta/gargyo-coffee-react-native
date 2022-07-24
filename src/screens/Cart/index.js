@@ -23,7 +23,7 @@ export default function Cart(props) {
 
   const getPromo = async () => {
     try {
-      console.log(REACT_APP_BE_HOST)
+      // console.log(REACT_APP_BE_HOST)
       const result = await axios.get(`${REACT_APP_BE_HOST}/promos/today`)
       setAllPromo(result.data.data)
       console.log(result.data.data)

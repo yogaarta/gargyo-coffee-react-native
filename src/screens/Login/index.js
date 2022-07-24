@@ -65,10 +65,10 @@ export default function Login({ navigation }) {
             onChange={(e) => { setBody({ ...body, email: e.nativeEvent.text }) }}
           />
           <View style={style.passContainer}>
-          <TextInput style={style.inputPass} placeholder='Enter your password' placeholderTextColor='#cccccc' secureTextEntry={showPass ? false : true}
-            onChange={(e) => { setBody({ ...body, pass: e.nativeEvent.text }) }}
-          />
-<Ionicons name={showPass ? 'eye-outline' : 'eye-off-outline'} style={style.eye} onPress={() => setShowPass(!showPass)} />
+            <TextInput style={style.inputPass} placeholder='Enter your password' placeholderTextColor='#cccccc' secureTextEntry={showPass ? false : true}
+              onChange={(e) => { setBody({ ...body, pass: e.nativeEvent.text }) }}
+            />
+            <Ionicons name={showPass ? 'eye-outline' : 'eye-off-outline'} style={style.eye} onPress={() => setShowPass(!showPass)} />
           </View>
           <Pressable onPress={() => navigation.navigate('Forgot')}>
             <Text style={style.forgot}>Forgot password?</Text>
