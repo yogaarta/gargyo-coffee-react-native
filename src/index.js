@@ -17,6 +17,8 @@ import EditProfile from './screens/EditProfile'
 import History from './screens/History'
 import AllProduct from './screens/Product'
 import NewProduct from './screens/NewProduct'
+import EditProduct from './screens/EditProduct'
+import NewPromo from './screens/NewPromo'
 
 const Drawer = createDrawerNavigator()
 
@@ -33,6 +35,8 @@ const DrawerNav = () => {
         <Drawer.Screen name='History' component={History} options={{ headerShown: false }}/>
         <Drawer.Screen name='AllProduct' component={AllProduct} options={{ headerShown: false }}/>
         <Drawer.Screen name='NewProduct' component={NewProduct} options={{ headerShown: false }}/>
+        <Drawer.Screen name='NewPromo' component={NewPromo} options={{ headerShown: false }}/>
+        <Drawer.Screen name='EditProduct' component={EditProduct} options={{ headerShown: false }}/>
       </Drawer.Navigator>
   )
 }

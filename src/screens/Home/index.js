@@ -53,7 +53,7 @@ export default function Home(props) {
   const getFood = async () => {
     try {
       setLoadingFood(true)
-      let URL = `${REACT_APP_BE_HOST}/products?category=coffee&limit=5`
+      let URL = `${REACT_APP_BE_HOST}/products?category=food&limit=5`
       const response = await axios.get(URL)
       setFood(response.data.data)
       setLoadingFood(false)
@@ -101,7 +101,6 @@ export default function Home(props) {
     }
   }, [])
 
-  // console.log(product)
   return (
     <View>
       <Header {...props} />
@@ -115,7 +114,7 @@ export default function Home(props) {
             <Pressable style={style.adminBtn} onPress={()=> props.navigation.navigate("NewProduct")}>
               <Text style={style.adminTxt}>New Product</Text>
             </Pressable>
-            <Pressable style={style.adminBtn}>
+            <Pressable style={style.adminBtn} onPress={()=> props.navigation.navigate("NewPromo")}>
               <Text style={style.adminTxt}>New Promo</Text>
             </Pressable>
           </View>

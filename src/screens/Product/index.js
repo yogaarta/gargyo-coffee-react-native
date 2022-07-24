@@ -80,6 +80,7 @@ export default function AllProduct(props) {
       setMsg('Product Not Found')
     }
   }
+  console.log(REACT_APP_BE_HOST)
   return (
     <View>
       <Header {...props} />

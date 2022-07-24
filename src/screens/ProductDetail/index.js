@@ -34,7 +34,7 @@ export default function ProductDetail(props) {
   useEffect(() => {
     setSize('')
     getProductDetail()
-  }, [props.route.params.id])
+  }, [props.route.params.id, props.route.params.edited])
 
   const errorToast = () => {
     Toast.show({
@@ -52,6 +52,7 @@ export default function ProductDetail(props) {
     props.navigation.navigate("Cart")
   }
 
+  console.log(REACT_APP_BE_HOST)
   return (
     <>
       <Header {...props} />
@@ -74,14 +75,14 @@ export default function ProductDetail(props) {
               <Text style={size === 'XL' ? style.sizeTextActive : style.sizeText} onPress={() => setSize('XL')}>XL</Text>
             </View>
           </View>
-          {userData.roles === 'admin' ? 
-          <Pressable style={style.btnContainer} onPress={addCartHandler}>
-            <Text style={style.btnText}>Edit Product</Text>
-          </Pressable>
-          :
-          <Pressable style={style.btnContainer} onPress={addCartHandler}>
-            <Text style={style.btnText}>Add to cart</Text>
-          </Pressable>
+          {userData.roles === 'admin' ?
+            <Pressable style={style.btnContainer} onPress={() => props.navigation.navigate('EditProduct', { id: props.route.params.id })}>
+              <Text style={style.btnText}>Edit Product</Text>
+            </Pressable>
+            :
+            <Pressable style={style.btnContainer} onPress={addCartHandler}>
+              <Text style={style.btnText}>Add to cart</Text>
+            </Pressable>
           }
         </View>
       }

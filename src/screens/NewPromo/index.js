@@ -1,6 +1,8 @@
-import { View, Text, TextInput, Pressable, Modal, Image, ActivityIndicator } from 'react-native'
+import { View, Text, TextInput, Pressable, Modal, Image, ActivityIndicator, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { REACT_APP_BE_HOST } from '@env'
+import moment from 'moment'
+import DatePicker from 'react-native-date-picker'
 import Toast from 'react-native-toast-message'
 import Awesome5 from 'react-native-vector-icons/FontAwesome5'
 import Awesome from 'react-native-vector-icons/FontAwesome'
@@ -10,13 +12,19 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 
-export default function NewProduct(props) {
+export default function NewPromo(props) {
   const [name, setName] = useState('')
   const [price, setPrice] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
-  const [show, setShow] = useState(false)
+  const [discount, setDiscount] = useState(0)
+  const [start, setStart] = useState('')
+  const [end, setEnd] = useState('')
+  const [code, setCode] = useState('')
   const [data, setData] = useState(null)
+  const [open, setOpen] = useState(false)
+  const [open2, setOpen2] = useState(false)
+  const [show, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
 
 
@@ -86,19 +94,27 @@ export default function NewProduct(props) {
       setLoading(true)
       const body = new FormData();
       body.append('name', name);
-      body.append('price', price);
+      body.append('normal_price', price);
       body.append('description', description);
       body.append('category_id', category);
-      body.append('picture', data)
+      body.append('discount', discount);
+      body.append('start_date', start);
+      body.append('end_date', end);
+      body.append('code', code);
+      body.append('picture', data);
       const config = { headers: { Authorization: `Bearer ${userInfo.token}`, "content-type": "multipart/form-data" } }
-      const result = await axios.post(`${REACT_APP_BE_HOST}/products`, body, config)
+      const result = await axios.post(`${REACT_APP_BE_HOST}/promos`, body, config)
       console.log(result)
       successToast()
       setName('')
       setPrice('')
       setDescription('')
       setCategory('')
-      setData({})
+      setDiscount('')
+      setStart('')
+      setEnd('')
+      setCode('')
+      setData(null)
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -110,7 +126,7 @@ export default function NewProduct(props) {
   return (
     <View>
       <Header {...props} />
-      <View style={style.container}>
+      <ScrollView style={style.container}>
         <View style={style.imgContainer}>
           {data && data.uri ?
             <Image source={{ uri: data.uri }} style={style.img} />
@@ -133,7 +149,47 @@ export default function NewProduct(props) {
         </View>
         <View style={style.inputContainer}>
           <Text style={style.title}>Description</Text>
-          <TextInput style={style.input} placeholder={'Input Product Description'} placeholderTextColor={'#9f9f9f'} value={description} onChangeText={(e) => setDescription(e)} />
+          <TextInput style={style.input} placeholder={'Input Promo Description'} placeholderTextColor={'#9f9f9f'} value={description} onChangeText={(e) => setDescription(e)} />
+        </View>
+        <View style={style.inputContainer}>
+          <Text style={style.title}>Discount</Text>
+          <TextInput style={style.input} placeholder={'Input Promo Discount'} placeholderTextColor={'#9f9f9f'} keyboardType={'number-pad'} value={discount} onChangeText={(e) => setDiscount(e)} />
+        </View>
+        <View style={style.inputContainer}>
+          <Text style={style.title}>Start Date</Text>
+          <View style={style.dateInputContainer}>
+            <TextInput placeholder='Input Promo Start Date' placeholderTextColor={'#9f9f9f'} editable={false} style={style.dateInput} value={start} />
+            <Awesome name='calendar' size={20} onPress={() => setOpen(true)} color={'#9f9f9f'} style={{flex: 1}}/>
+            <DatePicker modal open={open} date={start ? new Date(start) : new Date()} mode='date'
+              onConfirm={date => {
+                setOpen(false)
+                // console.log(moment(date).format('YYYY-MM-DD'))
+                setStart(moment(date).format('YYYY-MM-DD'))
+                // setEnd(date)
+              }}
+              onCancel={() => setOpen(false)} />
+          </View>
+          <View style={style.border}></View>
+        </View>
+        <View style={style.inputContainer}>
+          <Text style={style.title}>End Date</Text>
+          <View style={style.dateInputContainer}>
+            <TextInput placeholder='Input Promo End Date' placeholderTextColor={'#9f9f9f'} editable={false} style={style.dateInput} value={end} />
+            <Awesome name='calendar' size={20} onPress={() => setOpen2(true)} color={'#9f9f9f'} style={{flex: 1}}/>
+            <DatePicker modal open={open2} date={end ? new Date(end) : new Date()} mode='date'
+              onConfirm={date => {
+                setOpen2(false)
+                // console.log(moment(date).format('YYYY-MM-DD'))
+                setEnd(moment(date).format('YYYY-MM-DD'))
+                // setEnd(date)
+              }}
+              onCancel={() => setOpen(false)} />
+          </View>
+          <View style={style.border}></View>
+        </View>
+        <View style={style.inputContainer}>
+          <Text style={style.title}>Code</Text>
+          <TextInput style={style.input} placeholder={'Input Promo Code'} placeholderTextColor={'#9f9f9f'} value={code} onChangeText={(e) => setCode(e)} />
         </View>
         <View style={style.inputContainer}>
           <Text style={style.title}>Category</Text>
@@ -153,10 +209,10 @@ export default function NewProduct(props) {
           {loading ?
             <ActivityIndicator />
             :
-            <Text style={style.saveTxt}>Save Product</Text>
+            <Text style={style.saveTxt}>Save Promo</Text>
           }
         </Pressable>
-      </View>
+      </ScrollView>
       <Modal visible={show} transparent={true} animationType={'fade'}>
         <Pressable style={{ backgroundColor: '#000000', flex: 1, opacity: 0.5 }} onPress={() => setShow(false)}>
         </Pressable>

@@ -1,5 +1,5 @@
 import { View, Text, TextInput, Pressable, Modal, Image, ActivityIndicator } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { REACT_APP_BE_HOST } from '@env'
 import Toast from 'react-native-toast-message'
 import Awesome5 from 'react-native-vector-icons/FontAwesome5'
@@ -10,7 +10,7 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 
-export default function NewProduct(props) {
+export default function EditProduct(props) {
   const [name, setName] = useState('')
   const [price, setPrice] = useState('')
   const [description, setDescription] = useState('')
@@ -18,9 +18,31 @@ export default function NewProduct(props) {
   const [show, setShow] = useState(false)
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
-
+  const [product, setProduct] = useState({})
 
   const { userInfo } = useSelector(state => state.auth)
+
+  console.log(props.route.params.id)
+  const getProductDetail = async () => {
+    try {
+      setLoading(true)
+      console.log(REACT_APP_BE_HOST)
+      const id = props.route.params.id
+      const response = await axios.get(`${REACT_APP_BE_HOST}/products/${id}`)
+      console.log(response.data.data)
+      setProduct(response.data.data[0])
+      setCategory(response.data.data[0].category === 'coffee' ? '1' : response.data.data[0].category === 'noncoffee' ? '2' : '4')
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
+  }
+  useEffect(() => {
+    getProductDetail()
+    setData(null)
+  }, [props.route.params.id])
+
 
   const chooseImage = async () => {
     const options = {
@@ -70,13 +92,13 @@ export default function NewProduct(props) {
   const successToast = () => {
     Toast.show({
       type: 'success',
-      text1: 'Product Successfuly Created'
+      text1: 'Product Successfuly Edited'
     })
   }
   const errorToast = () => {
     Toast.show({
       type: 'error',
-      text1: 'Create Failed',
+      text1: 'Edit Failed',
       text2: 'Please check your connection and try again'
     })
   }
@@ -85,20 +107,18 @@ export default function NewProduct(props) {
     try {
       setLoading(true)
       const body = new FormData();
-      body.append('name', name);
-      body.append('price', price);
-      body.append('description', description);
+      body.append('name', product.name);
+      body.append('price', product.price);
+      body.append('description', product.description);
       body.append('category_id', category);
       body.append('picture', data)
       const config = { headers: { Authorization: `Bearer ${userInfo.token}`, "content-type": "multipart/form-data" } }
-      const result = await axios.post(`${REACT_APP_BE_HOST}/products`, body, config)
+      console.log("SUCCESS")
+      const result = await axios.patch(`${REACT_APP_BE_HOST}/products/${props.route.params.id}`, body, config)
+      console.log("SUCCESS2")
       console.log(result)
       successToast()
-      setName('')
-      setPrice('')
-      setDescription('')
-      setCategory('')
-      setData({})
+      props.navigation.navigate('Product', { id: props.route.params.id, edited: true })
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -106,7 +126,7 @@ export default function NewProduct(props) {
       setLoading(false)
     }
   }
-
+  // console.log(product.price)
   return (
     <View>
       <Header {...props} />
@@ -115,9 +135,10 @@ export default function NewProduct(props) {
           {data && data.uri ?
             <Image source={{ uri: data.uri }} style={style.img} />
             :
-            <View style={style.defaultContainer}>
-              <Awesome5 name='camera' color={'#bababa'} size={50} />
-            </View>
+            <Image source={{ uri: product.picture }} style={style.img} />
+            // <View style={style.defaultContainer}>
+            //   <Awesome5 name='camera' color={'#bababa'} size={50} />
+            // </View>
           }
           <Pressable style={style.plusContainer} onPress={() => setShow(true)}>
             <Awesome5 name='plus' color={'#ffffff'} size={25} style={style.plus} />
@@ -125,15 +146,15 @@ export default function NewProduct(props) {
         </View>
         <View style={style.inputContainer}>
           <Text style={style.title}>Name</Text>
-          <TextInput style={style.input} placeholder={'Input Product Name'} placeholderTextColor={'#9f9f9f'} value={name} onChangeText={(e) => setName(e)} />
+          <TextInput style={style.input} placeholder={'Input Product Name'} placeholderTextColor={'#9f9f9f'} value={product.name} onChangeText={(e) => setProduct({ ...product, name: e })} />
         </View>
         <View style={style.inputContainer}>
           <Text style={style.title}>Price</Text>
-          <TextInput style={style.input} placeholder={'Input Product Price'} placeholderTextColor={'#9f9f9f'} keyboardType={'number-pad'} value={price} onChangeText={(e) => setPrice(e)} />
+          <TextInput style={style.input} placeholder={'Input Product Price'} placeholderTextColor={'#9f9f9f'} keyboardType={'number-pad'} value={product.price && product.price.toString()} onChangeText={(e) => setProduct({ ...product, price: e })} />
         </View>
         <View style={style.inputContainer}>
           <Text style={style.title}>Description</Text>
-          <TextInput style={style.input} placeholder={'Input Product Description'} placeholderTextColor={'#9f9f9f'} value={description} onChangeText={(e) => setDescription(e)} />
+          <TextInput style={style.input} placeholder={'Input Product Description'} placeholderTextColor={'#9f9f9f'} value={product.description} onChangeText={(e) => setProduct({ ...product, description: e })} />
         </View>
         <View style={style.inputContainer}>
           <Text style={style.title}>Category</Text>

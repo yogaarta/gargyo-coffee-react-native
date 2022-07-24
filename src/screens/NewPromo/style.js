@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     paddingHorizontal: '5%',
+    marginBottom: 70
   },
   imgContainer: {
     display: 'flex',
@@ -57,6 +58,23 @@ export default StyleSheet.create({
     padding: 0,
     borderBottomWidth: 2,
     borderBottomColor: '#9f9f9f'
+  },
+  dateInputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: 20
+  },
+  dateInput:{
+    flex: 12,
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 15,
+    color: '#000000',
+    padding: 0,
+  },
+  border: {
+    borderBottomWidth: 1,
+    borderColor: '#9f9f9f'
   },
   categoryContainer: {
     marginVertical: 10,

@@ -31,7 +31,7 @@ export default function EditProfile(props) {
   const [isSuccess, setIsSuccess] = useState(false)
   const [gender, setGender] = useState('')
   const [show, setShow] = useState(false)
-  const [data, setData] = useState({})
+  const [data, setData] = useState(null)
   // const [body, setBody] = useState({...userData})
   const [body, setBody] = useState({
     display_name: '',
@@ -205,7 +205,7 @@ export default function EditProfile(props) {
         <View style={style.imgContainer}>
           {/* {renderFileData()} */}
           {/* {renderFileUri()} */}
-          <Image source={data.uri ? { uri: data.uri } : body.profile_picture ? { uri: body.profile_picture } : require('../../assets/img/profpict.png')} style={style.profpict} />
+          <Image source={data && data.uri ? { uri: data.uri } : body.profile_picture ? { uri: body.profile_picture } : require('../../assets/img/profpict.png')} style={style.profpict} />
           <Pressable style={style.pencilContainer} onPress={() => setShow(true)}>
             <SimpleLineIcons name='pencil' size={20} color={'#ffffff'} style={style.pencil} />
           </Pressable>

@@ -2,12 +2,16 @@ import { View, Text, ImageBackground, Pressable, } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import style from './style'
+import { useDispatch } from 'react-redux';
+import { logoutAction } from '../../redux/actionCreators/auth';
 
 
 export default function Start({ navigation }) {
   const [page, setPage] = useState('splash')
+  const dispatch = useDispatch()
 
   useEffect(() => {
+    dispatch(logoutAction())
     setTimeout(() => {
       if(page === 'splash'){
         setPage('home')
