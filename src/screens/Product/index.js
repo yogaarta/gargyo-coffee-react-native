@@ -137,12 +137,12 @@ export default function AllProduct(props) {
             >All</Text>
           </ScrollView>
           {loading ?
-            <ActivityIndicator size={'large'} style={style.loading} />
+            <ActivityIndicator size={50} style={style.loading} />
             :
             product.length < 1 ?
               <Text style={{fontFamily: 'Poppins-ExtraBold', fontSize: 28, color: '#000000', textAlign: 'center', marginTop: 100}}>{msg}</Text>
               :
-              <FlatList data={product} numColumns={2} onEndReached={() => setLimit(limit + 6)}
+              <FlatList data={product} numColumns={2} onEndReached={() => setLimit(limit + 6)} style={{alignSelf: 'center'}}
                 renderItem={({ item, idx }) => (
                   <ProductCard key={idx} id={item.id} name={item.name} picture={item.picture} price={item.price} {...props} />
                 )} />

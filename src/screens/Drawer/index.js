@@ -36,10 +36,17 @@ function MyDrawer(props) {
             <Ionicons name='person-circle-outline' size={35} color='#6A4029' />
             <Text style={style.menuText}>Profile</Text>
           </Pressable>
-          <Pressable style={style.menuList} onPress={() => props.navigation.navigate('Cart')}>
-            <Material name='cart-arrow-down' size={35} color='#6A4029' />
-            <Text style={style.menuText}>Orders</Text>
-          </Pressable>
+          {userData.roles === 'admin' ?
+            <Pressable style={style.menuList} onPress={() => props.navigation.navigate('EditPromo')}>
+              <Material name='ticket-percent-outline' size={35} color='#6A4029' />
+              <Text style={style.menuText}>Promos</Text>
+            </Pressable>
+            :
+            <Pressable style={style.menuList} onPress={() => props.navigation.navigate('Cart')}>
+              <Material name='cart-arrow-down' size={35} color='#6A4029' />
+              <Text style={style.menuText}>Orders</Text>
+            </Pressable>
+          }
           <Pressable style={style.menuList} onPress={() => props.navigation.navigate('AllProduct', { category: 'all' })}>
             <Ionicons name='fast-food-outline' size={35} color='#6A4029' />
             <Text style={style.menuText}>All menu</Text>
@@ -73,7 +80,7 @@ function MyDrawer(props) {
         <DrawerItem />
       </DrawerContentScrollView> */}
       </View>
-      <Modal visible={show} transparent={true}>
+      <Modal visible={show} transparent={true} animationType={'fade'}>
         <Pressable style={{ backgroundColor: '#000000', flex: 1, opacity: 0.5 }} onPress={() => setShow(false)}>
         </Pressable>
         <View style={{

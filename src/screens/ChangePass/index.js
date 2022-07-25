@@ -34,7 +34,7 @@ export default function ChangePass(props) {
       text1: msg
     })
   }
-  console.log(REACT_APP_BE_HOST)
+  // console.log(REACT_APP_BE_HOST)
   const resetHandler = async () => {
     try {
       if (!pass || !pass2) {
@@ -45,15 +45,18 @@ export default function ChangePass(props) {
       }
       setLoading(true)
       const body = { newPass: pass }
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}`, "content-type": "multipart/form-data" } }
+      console.log(body)
+      console.log(userInfo.token)
+      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } }
       const result = await axios.patch(`${REACT_APP_BE_HOST}/users/changepass`, body, config)
+      console.log(result)
       successToast('Password Changed, Please Login Again')
       dispatch(logoutAction())
       props.navigation.replace('Login')
       setLoading(false)
     } catch (error) {
-      console.log(error.response.data.err.msg)
-      errorToast(error.response.data.err.msg)
+      console.log(error.response.data)
+      errorToast('Network Error, Please Try Again')
       setLoading(false)
     }
   }
@@ -73,7 +76,6 @@ export default function ChangePass(props) {
       <View style={style.imageBgClr}>
         <View style={style.titleContainer}>
           <Text style={style.title}>Edit Password</Text>
-          <Text style={style.subtitle}>We've just sent a link to your email to request a new password</Text>
         </View>
         <View style={style.btnContainer}>
           <View style={style.passContainer}>

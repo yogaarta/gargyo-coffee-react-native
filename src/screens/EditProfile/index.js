@@ -267,7 +267,7 @@ export default function EditProfile(props) {
           </Pressable>
         }
       </View>
-      <Modal visible={show} transparent={true}>
+      <Modal visible={show} transparent={true} animationType={'fade'}>
         <Pressable style={{ backgroundColor: '#000000', flex: 1, opacity: 0.5 }} onPress={() => setShow(false)}>
         </Pressable>
         <View style={{

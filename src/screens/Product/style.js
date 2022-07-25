@@ -55,4 +55,8 @@ export default StyleSheet.create({
     fontSize: 15,
     color: '#9A9A9D'
   },
+  loading: {
+    marginTop: 200,
+    
+  }
 })

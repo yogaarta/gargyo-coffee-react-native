@@ -128,56 +128,60 @@ export default function EditProduct(props) {
   }
   // console.log(product.price)
   return (
-    <View>
+    <>
       <Header {...props} />
-      <View style={style.container}>
-        <View style={style.imgContainer}>
-          {data && data.uri ?
-            <Image source={{ uri: data.uri }} style={style.img} />
-            :
-            <Image source={{ uri: product.picture }} style={style.img} />
-            // <View style={style.defaultContainer}>
-            //   <Awesome5 name='camera' color={'#bababa'} size={50} />
-            // </View>
-          }
-          <Pressable style={style.plusContainer} onPress={() => setShow(true)}>
-            <Awesome5 name='plus' color={'#ffffff'} size={25} style={style.plus} />
-          </Pressable>
-        </View>
-        <View style={style.inputContainer}>
-          <Text style={style.title}>Name</Text>
-          <TextInput style={style.input} placeholder={'Input Product Name'} placeholderTextColor={'#9f9f9f'} value={product.name} onChangeText={(e) => setProduct({ ...product, name: e })} />
-        </View>
-        <View style={style.inputContainer}>
-          <Text style={style.title}>Price</Text>
-          <TextInput style={style.input} placeholder={'Input Product Price'} placeholderTextColor={'#9f9f9f'} keyboardType={'number-pad'} value={product.price && product.price.toString()} onChangeText={(e) => setProduct({ ...product, price: e })} />
-        </View>
-        <View style={style.inputContainer}>
-          <Text style={style.title}>Description</Text>
-          <TextInput style={style.input} placeholder={'Input Product Description'} placeholderTextColor={'#9f9f9f'} value={product.description} onChangeText={(e) => setProduct({ ...product, description: e })} />
-        </View>
-        <View style={style.inputContainer}>
-          <Text style={style.title}>Category</Text>
-          <View style={style.categoryContainer}>
-            <Pressable style={category === '1' ? style.categoryBtnAct : style.categoryBtn} onPress={() => setCategory('1')}>
-              <Text style={category === '1' ? style.categoryTxtAct : style.categoryTxt}>Coffee</Text>
-            </Pressable>
-            <Pressable style={category === '2' ? style.categoryBtnAct : style.categoryBtn} onPress={() => setCategory('2')}>
-              <Text style={category === '2' ? style.categoryTxtAct : style.categoryTxt}>Non Coffee</Text>
-            </Pressable>
-            <Pressable style={category === '4' ? style.categoryBtnAct : style.categoryBtn} onPress={() => setCategory('4')}>
-              <Text style={category === '4' ? style.categoryTxtAct : style.categoryTxt}>Food</Text>
+      {loading ?
+        <ActivityIndicator size={50} style={{ flex: 1 }} />
+        :
+        <View style={style.container}>
+          <View style={style.imgContainer}>
+            {data && data.uri ?
+              <Image source={{ uri: data.uri }} style={style.img} />
+              :
+              <Image source={{ uri: product.picture }} style={style.img} />
+              // <View style={style.defaultContainer}>
+              //   <Awesome5 name='camera' color={'#bababa'} size={50} />
+              // </View>
+            }
+            <Pressable style={style.plusContainer} onPress={() => setShow(true)}>
+              <Awesome5 name='plus' color={'#ffffff'} size={25} style={style.plus} />
             </Pressable>
           </View>
+          <View style={style.inputContainer}>
+            <Text style={style.title}>Name</Text>
+            <TextInput style={style.input} placeholder={'Input Product Name'} placeholderTextColor={'#9f9f9f'} value={product.name} onChangeText={(e) => setProduct({ ...product, name: e })} />
+          </View>
+          <View style={style.inputContainer}>
+            <Text style={style.title}>Price</Text>
+            <TextInput style={style.input} placeholder={'Input Product Price'} placeholderTextColor={'#9f9f9f'} keyboardType={'number-pad'} value={product.price && product.price.toString()} onChangeText={(e) => setProduct({ ...product, price: e })} />
+          </View>
+          <View style={style.inputContainer}>
+            <Text style={style.title}>Description</Text>
+            <TextInput style={style.input} placeholder={'Input Product Description'} placeholderTextColor={'#9f9f9f'} value={product.description} onChangeText={(e) => setProduct({ ...product, description: e })} />
+          </View>
+          <View style={style.inputContainer}>
+            <Text style={style.title}>Category</Text>
+            <View style={style.categoryContainer}>
+              <Pressable style={category === '1' ? style.categoryBtnAct : style.categoryBtn} onPress={() => setCategory('1')}>
+                <Text style={category === '1' ? style.categoryTxtAct : style.categoryTxt}>Coffee</Text>
+              </Pressable>
+              <Pressable style={category === '2' ? style.categoryBtnAct : style.categoryBtn} onPress={() => setCategory('2')}>
+                <Text style={category === '2' ? style.categoryTxtAct : style.categoryTxt}>Non Coffee</Text>
+              </Pressable>
+              <Pressable style={category === '4' ? style.categoryBtnAct : style.categoryBtn} onPress={() => setCategory('4')}>
+                <Text style={category === '4' ? style.categoryTxtAct : style.categoryTxt}>Food</Text>
+              </Pressable>
+            </View>
+          </View>
+          <Pressable style={style.saveBtn} onPress={saveHandler}>
+            {loading ?
+              <ActivityIndicator />
+              :
+              <Text style={style.saveTxt}>Save Product</Text>
+            }
+          </Pressable>
         </View>
-        <Pressable style={style.saveBtn} onPress={saveHandler}>
-          {loading ?
-            <ActivityIndicator />
-            :
-            <Text style={style.saveTxt}>Save Product</Text>
-          }
-        </Pressable>
-      </View>
+      }
       <Modal visible={show} transparent={true} animationType={'fade'}>
         <Pressable style={{ backgroundColor: '#000000', flex: 1, opacity: 0.5 }} onPress={() => setShow(false)}>
         </Pressable>
@@ -214,6 +218,6 @@ export default function EditProduct(props) {
           </Pressable>
         </View>
       </Modal>
-    </View>
+    </>
   )
 }
