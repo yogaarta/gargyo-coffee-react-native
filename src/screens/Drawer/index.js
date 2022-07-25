@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
-import { Image, Pressable, Text, View } from 'react-native';
+import { Image, Modal, Pressable, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Material from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -12,6 +12,7 @@ const Drawer = createDrawerNavigator();
 
 function MyDrawer(props) {
   const dispatch = useDispatch()
+  const [show, setShow] = useState(false)
   const { userData } = useSelector(state => state.user)
   return (
     <>
@@ -60,8 +61,9 @@ function MyDrawer(props) {
           </View> */}
         </View>
         <Pressable style={style.menuList} onPress={() => {
-          dispatch(logoutAction())
-          props.navigation.replace("Login")
+          setShow(true)
+          // dispatch(logoutAction())
+          // props.navigation.replace("Login")
         }}>
           <Material name='logout' size={35} color='#6A4029' />
           <Text style={style.menuText}>Logout</Text>
@@ -71,6 +73,69 @@ function MyDrawer(props) {
         <DrawerItem />
       </DrawerContentScrollView> */}
       </View>
+      <Modal visible={show} transparent={true}>
+        <Pressable style={{ backgroundColor: '#000000', flex: 1, opacity: 0.5 }} onPress={() => setShow(false)}>
+        </Pressable>
+        <View style={{
+          backgroundColor: '#ffffff',
+          position: 'absolute',
+          width: '60%',
+          height: '20%',
+          borderRadius: 10,
+          top: '40%',
+          left: '20%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-around',
+          paddingVertical: 20
+        }}>
+
+          <Text style={{
+            fontFamily: 'Poppins-Bold',
+            fontSize: 20,
+            color: '#000000',
+            textAlign: 'center'
+          }}>
+            Are You Sure?
+          </Text>
+          <View style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginHorizontal: '10%'
+          }}>
+            <Pressable style={{
+              backgroundColor: '#6A4029',
+              paddingVertical: 2.5,
+              paddingHorizontal: '5%',
+              borderRadius: 10
+            }} onPress={() => {
+              dispatch(logoutAction())
+              props.navigation.replace("Login")
+            }}>
+              <Text style={{
+                fontFamily: 'Poppins-SemiBold',
+                fontSize: 18,
+                color: '#ffffff',
+                textAlign: 'center',
+              }}>Logout</Text>
+            </Pressable>
+            <Pressable style={{
+              backgroundColor: '#FFBA33',
+              paddingVertical: 2.5,
+              paddingHorizontal: '5%',
+              borderRadius: 10
+            }} onPress={() => setShow(false)}>
+              <Text style={{
+                fontFamily: 'Poppins-SemiBold',
+                fontSize: 18,
+                color: '#6A4029',
+                textAlign: 'center'
+              }}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 }

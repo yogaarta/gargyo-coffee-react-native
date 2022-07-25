@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ScrollView, FlatList, ActivityIndicator, Pressable } from 'react-native'
+import { View, Text, TextInput, ScrollView, FlatList, ActivityIndicator, Pressable, BackHandler, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import IconIonicons from 'react-native-vector-icons/Ionicons'
@@ -9,6 +9,7 @@ import style from './style'
 import Header from '../../components/Header'
 import ProductCard from '../../components/ProductCard'
 import { getUserAction } from '../../redux/actionCreators/user'
+import { useRoute } from '@react-navigation/native'
 
 export default function Home(props) {
   const [menu, setMenu] = useState('favorite')
@@ -21,10 +22,14 @@ export default function Home(props) {
   const [loadingCoffee, setLoadingCoffee] = useState(false)
   const [loadingNonCoffee, setLoadingNonCoffee] = useState(false)
   const [loadingFood, setLoadingFood] = useState(false)
+  const [show, setShow] = useState(false)
 
   const { userInfo } = useSelector(state => state.auth)
   const { userData } = useSelector(state => state.user)
   const dispatch = useDispatch()
+
+  const route = useRoute()
+  // console.log(route)
 
   const getNonCoffee = async () => {
     try {
@@ -101,6 +106,19 @@ export default function Home(props) {
     }
   }, [])
 
+  // useEffect(() => {
+  //   BackHandler.addEventListener('hardwareBackPress',
+  //     () => {
+  //       setShow(true)
+  //       return true
+  //     })
+  //   return () => BackHandler.removeEventListener('hardwareBackPress',
+  //   () => {
+  //     // setShow(true)
+  //     return true
+  //   })
+  // }, [])
+
   return (
     <View>
       <Header {...props} />
@@ -111,10 +129,10 @@ export default function Home(props) {
       <ScrollView style={style.productContainer} showsHorizontalScrollIndicator={false}>
         {userData.roles === 'admin' ?
           <View style={style.adminContainer}>
-            <Pressable style={style.adminBtn} onPress={()=> props.navigation.navigate("NewProduct")}>
+            <Pressable style={style.adminBtn} onPress={() => props.navigation.navigate("NewProduct")}>
               <Text style={style.adminTxt}>New Product</Text>
             </Pressable>
-            <Pressable style={style.adminBtn} onPress={()=> props.navigation.navigate("NewPromo")}>
+            <Pressable style={style.adminBtn} onPress={() => props.navigation.navigate("NewPromo")}>
               <Text style={style.adminTxt}>New Promo</Text>
             </Pressable>
           </View>
@@ -173,7 +191,69 @@ export default function Home(props) {
         }
         <View style={{ height: 200 }}></View>
       </ScrollView>
+      <Modal visible={show} transparent={true}>
+        <Pressable style={{ backgroundColor: '#000000', flex: 1, opacity: 0.5 }} onPress={() => setShow(false)}>
+        </Pressable>
+        <View style={{
+          backgroundColor: '#ffffff',
+          position: 'absolute',
+          width: '60%',
+          height: '20%',
+          borderRadius: 10,
+          top: '40%',
+          left: '20%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-around',
+          paddingVertical: 20
+        }}>
 
+          <Text style={{
+            fontFamily: 'Poppins-Bold',
+            fontSize: 20,
+            color: '#000000',
+            textAlign: 'center'
+          }}>
+            Are You Sure?
+          </Text>
+          <View style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginHorizontal: '10%'
+          }}>
+            <Pressable style={{
+              backgroundColor: '#6A4029',
+              paddingVertical: 2.5,
+              paddingHorizontal: '5%',
+              borderRadius: 10
+            }} onPress={() => {
+              dispatch(logoutAction())
+              props.navigation.replace("Login")
+            }}>
+              <Text style={{
+                fontFamily: 'Poppins-SemiBold',
+                fontSize: 18,
+                color: '#ffffff',
+                textAlign: 'center',
+              }}>Logout</Text>
+            </Pressable>
+            <Pressable style={{
+              backgroundColor: '#FFBA33',
+              paddingVertical: 2.5,
+              paddingHorizontal: '5%',
+              borderRadius: 10
+            }} onPress={() => setShow(false)}>
+              <Text style={{
+                fontFamily: 'Poppins-SemiBold',
+                fontSize: 18,
+                color: '#6A4029',
+                textAlign: 'center'
+              }}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   )
 }

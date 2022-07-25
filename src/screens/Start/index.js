@@ -11,12 +11,12 @@ export default function Start({ navigation }) {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(logoutAction())
-    setTimeout(() => {
-      if(page === 'splash'){
+    if (page === 'splash') {
+      dispatch(logoutAction())
+      setTimeout(() => {
         setPage('home')
-      }
-    }, 5000)
+      }, 5000)
+    }
   })
   return (
     <View style={style.container}>
