@@ -1,6 +1,7 @@
 import { View, Text, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import Toast from 'react-native-toast-message'
 import Octicons from 'react-native-vector-icons/Octicons'
 import Header from '../../components/Header'
 import style from './style'
@@ -14,9 +15,19 @@ export default function Delivery(props) {
 
   const dispatch = useDispatch()
 
+  const errorToast = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Please Input Delivery Method'
+    })
+  }
   const proceedHandler = () => {
+    if(!delivery){
+      return errorToast()
+    }
     const newProduct = { ...product, delivery }
     dispatch(addProductAction(newProduct))
+    setDelivery('')
     props.navigation.navigate('Payment')
   }
 

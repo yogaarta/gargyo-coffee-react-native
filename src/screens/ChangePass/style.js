@@ -5,7 +5,7 @@ export default StyleSheet.create({
   },
   imageBgClr: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
     display: 'flex',
     flexDirection: 'column'
   },
@@ -20,8 +20,8 @@ export default StyleSheet.create({
   title: {
     // flex: 1,
     fontFamily: 'Poppins-Bold',
-    color: '#ffffff',
-    fontSize: 65,
+    color: '#000000',
+    fontSize: 40,
     textAlignVertical: 'center',
     textAlign: 'center'
   },
@@ -38,9 +38,9 @@ export default StyleSheet.create({
   },
   input: {
     width: '80%',
-    borderBottomColor: '#ffffff',
+    borderBottomColor: '#000000',
     fontFamily: 'Poppins-Bold',
-    color: '#ffffff',
+    color: '#000000',
     fontSize: 14,
     borderBottomWidth: 2,
     alignSelf: 'center',
@@ -50,7 +50,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderBottomColor: '#ffffff',
+    borderBottomColor: '#9f9f9f',
     borderBottomWidth: 2,
     alignSelf: 'center',
     width: '80%'
@@ -58,12 +58,12 @@ export default StyleSheet.create({
   inputPass: {
     width: '80%',
     fontFamily: 'Poppins-Bold',
-    color: '#ffffff',
+    color: '#000000',
     fontSize: 14,
     alignSelf: 'center',
   },
   eye: {
-    color: '#ffffff',
+    color: '#9f9f9f',
     fontSize: 25
   },
   button: {

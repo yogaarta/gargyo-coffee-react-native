@@ -37,6 +37,13 @@ export default StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     fontSize: 14,
     color: '#ffffff'
+  }, 
+  inputPass: {
+    width: '80%',
+    fontFamily: 'Poppins-Bold',
+    color: '#ffffff',
+    fontSize: 14,
+    alignSelf: 'center',
   },
   forgot: {
     color: '#ffffff',

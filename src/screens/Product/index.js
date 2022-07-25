@@ -18,10 +18,10 @@ export default function AllProduct(props) {
   const [loading, setLoading] = useState(false)
   const [msg, setMsg] = useState('')
 
-  // useEffect(() => {
-  //   setMenu(props.route.params.category)
-  //   getProduct()
-  // }, [props.route.params.category])
+  useEffect(() => {
+    setMenu(props.route.params.category)
+    // getProduct()
+  }, [props.route.params.category])
   useEffect(() => {
     getProduct()
   }, [menu, search, sort, order])
@@ -37,7 +37,7 @@ export default function AllProduct(props) {
         URL += '/favorite'
       }
       if (menu !== 'favorite') {
-        URL += `?limit=${limit}`
+        URL += `?limit=${limit}&sort=${sort}&order=${order}`
       }
       if (search !== '' && menu !== 'favorite') {
         URL += `&name=${search}`
@@ -45,7 +45,7 @@ export default function AllProduct(props) {
       if (menu !== 'favorite' && menu !== 'all') {
         URL += `&category=${menu}`
       }
-      URL += `&sort=${sort}&order=${order}`
+      // URL += `&sort=${sort}&order=${order}`
       const response = await axios.get(URL)
       setProduct(response.data.data)
       setLoading(false)
@@ -63,7 +63,7 @@ export default function AllProduct(props) {
         URL += '/favorite'
       }
       if (menu !== 'favorite') {
-        URL += `?limit=${limit}`
+        URL += `?limit=${limit}&sort=${sort}&order=${order}`
       }
       if (search !== '' && menu !== 'favorite') {
         URL += `&name=${search}`
@@ -71,7 +71,7 @@ export default function AllProduct(props) {
       if (menu !== 'favorite' && menu !== 'all') {
         URL += `&category=${menu}`
       }
-      URL += `&sort=${sort}&order=${order}`
+      // URL += `&sort=${sort}&order=${order}`
       const response = await axios.get(URL)
       setProduct(response.data.data)
     } catch (error) {
@@ -80,17 +80,20 @@ export default function AllProduct(props) {
       setMsg('Product Not Found')
     }
   }
+  // console.log(REACT_APP_BE_HOST)
   return (
     <View>
       <Header {...props} />
       <View style={style.container}>
         <View style={style.searchContainer}>
           <IconIonicons name='search' size={20} color='#9F9F9F' />
-          <TextInput style={style.searchInput} placeholder={'Search'} onChange={(e) => {
-            // setTimeout(()=> setSearch(e.nativeEvent.text), 3000)
-            setSearch(e.nativeEvent.text)
+          <TextInput style={style.searchInput} placeholder={'Search'} placeholderTextColor={'#9F9F9F'} onChangeText={(e) => {
+            setTimeout(()=> {
+              console.log(e)
+              setSearch(e)}, 2000)
+            // setSearch(e)
             // console.log(e.nativeEvent.text)
-            // (setTimeout(()=> console.log(e.nativeEvent.text)), 2000)
+            // setTimeout(()=> console.log(e)), 2000
           }} />
         </View>
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -134,12 +137,12 @@ export default function AllProduct(props) {
             >All</Text>
           </ScrollView>
           {loading ?
-            <ActivityIndicator size={'large'} style={style.loading} />
+            <ActivityIndicator size={50} style={style.loading} />
             :
             product.length < 1 ?
               <Text style={{fontFamily: 'Poppins-ExtraBold', fontSize: 28, color: '#000000', textAlign: 'center', marginTop: 100}}>{msg}</Text>
               :
-              <FlatList data={product} numColumns={2} onEndReached={() => setLimit(limit + 6)}
+              <FlatList data={product} numColumns={2} onEndReached={() => setLimit(limit + 6)} style={{alignSelf: 'center'}}
                 renderItem={({ item, idx }) => (
                   <ProductCard key={idx} id={item.id} name={item.name} picture={item.picture} price={item.price} {...props} />
                 )} />

@@ -35,9 +35,27 @@ export default StyleSheet.create({
     borderRadius: 15,
     marginBottom: 20,
     display: 'flex',
+    flexDirection: 'column',
+    // alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  cardRow: {
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
+  },
+  cardRowCoupon: {
+    marginTop: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around'
+  },
+  subtitleCoupon: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 17,
+    color: '#000000'
   },
   item: {
     fontFamily: 'Poppins-Regular',

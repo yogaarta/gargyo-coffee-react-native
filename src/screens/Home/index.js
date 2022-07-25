@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ScrollView, FlatList, ActivityIndicator } from 'react-native'
+import { View, Text, TextInput, ScrollView, FlatList, ActivityIndicator, Pressable, BackHandler, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import IconIonicons from 'react-native-vector-icons/Ionicons'
@@ -9,6 +9,7 @@ import style from './style'
 import Header from '../../components/Header'
 import ProductCard from '../../components/ProductCard'
 import { getUserAction } from '../../redux/actionCreators/user'
+import { useRoute } from '@react-navigation/native'
 
 export default function Home(props) {
   const [menu, setMenu] = useState('favorite')
@@ -17,57 +18,59 @@ export default function Home(props) {
   const [coffee, setCoffee] = useState([])
   const [nonCoffee, setNonCoffee] = useState([])
   const [food, setFood] = useState([])
-  const [loading, setLoading] = useState({
-    all: false,
-    coffee: false,
-    nonCoffee: false,
-    food: false,
-    favorite: false
-  })
+  const [loading, setLoading] = useState(false)
+  const [loadingCoffee, setLoadingCoffee] = useState(false)
+  const [loadingNonCoffee, setLoadingNonCoffee] = useState(false)
+  const [loadingFood, setLoadingFood] = useState(false)
+  const [show, setShow] = useState(false)
 
   const { userInfo } = useSelector(state => state.auth)
+  const { userData } = useSelector(state => state.user)
   const dispatch = useDispatch()
+
+  const route = useRoute()
+  // console.log(route)
 
   const getNonCoffee = async () => {
     try {
-      setLoading({ ...loading, nonCoffee: true })
+      setLoadingNonCoffee(true)
       let URL = `${REACT_APP_BE_HOST}/products?category=noncoffee&limit=5`
       const response = await axios.get(URL)
       setNonCoffee(response.data.data)
-      setLoading({ ...loading, nonCoffee: false })
+      setLoadingNonCoffee(false)
     } catch (error) {
       console.log(error)
-      setLoading({ ...loading, nonCoffee: false })
+      setLoadingNonCoffee(false)
     }
   }
   const getCoffee = async () => {
     try {
-      setLoading({ ...loading, coffee: true })
+      setLoadingCoffee(true)
       let URL = `${REACT_APP_BE_HOST}/products?category=coffee&limit=5`
       const response = await axios.get(URL)
       setCoffee(response.data.data)
-      setLoading({ ...loading, coffee: false })
+      setLoadingCoffee(false)
     } catch (error) {
       console.log(error)
-      setLoading({ ...loading, coffee: false })
+      setLoadingCoffee(false)
     }
   }
   const getFood = async () => {
     try {
-      setLoading({ ...loading, food: true })
-      let URL = `${REACT_APP_BE_HOST}/products?category=coffee&limit=5`
+      setLoadingFood(true)
+      let URL = `${REACT_APP_BE_HOST}/products?category=food&limit=5`
       const response = await axios.get(URL)
       setFood(response.data.data)
-      setLoading({ ...loading, food: false })
+      setLoadingFood(false)
     } catch (error) {
       console.log(error)
-      setLoading({ ...loading, food: false })
+      setLoadingFood(false)
     }
   }
 
   const getProduct = async () => {
     try {
-      setLoading({ ...loading, all: true })
+      setLoading(true)
       let URL = `${REACT_APP_BE_HOST}/products`
       if (menu === 'favorite') {
         URL += '/favorite'
@@ -83,10 +86,10 @@ export default function Home(props) {
       }
       const response = await axios.get(URL)
       setProduct(response.data.data)
-      setLoading({ ...loading, all: false })
+      setLoading(false)
     } catch (error) {
       console.log(error)
-      setLoading({ ...loading, all: false })
+      setLoading(false)
     }
   }
 
@@ -98,51 +101,50 @@ export default function Home(props) {
   }, [menu])
 
   useEffect(() => {
-    dispatch(getUserAction(userInfo.token))
+    if (userInfo.token) {
+      dispatch(getUserAction(userInfo.token))
+    }
   }, [])
 
-  // console.log(product)
+  // useEffect(() => {
+  //   BackHandler.addEventListener('hardwareBackPress',
+  //     () => {
+  //       setShow(true)
+  //       return true
+  //     })
+  //   return () => BackHandler.removeEventListener('hardwareBackPress',
+  //   () => {
+  //     // setShow(true)
+  //     return true
+  //   })
+  // }, [])
+
   return (
     <View>
       <Header {...props} />
       <View style={style.container}>
         <Text style={style.title}>A good coffee is a good day</Text>
       </View>
-      {/* <View style={style.searchContainer}>
-        <IconIonicons name='search' size={20} color='#9F9F9F' />
-        <TextInput style={style.searchInput} placeholder={'Search'} onChange={(e) => {
-          // setTimeout(setSearch(e.nativeEvent.text), 3000)
-          // setSearch(e.nativeEvent.text)
-          // console.log(e.nativeEvent.text)
-          // (setTimeout(()=> console.log(e.nativeEvent.text)), 2000)
-        }} />
-      </View>
-      <ScrollView horizontal={true} style={style.scrollViewH} showsHorizontalScrollIndicator={false}>
-        <Text style={menu === 'favorite' ? style.categoryTextAct : style.categoryText}
-          onPress={() => setMenu('favorite')}
-        >Favorite</Text>
-        <Text style={menu === 'coffee' ? style.categoryTextAct : style.categoryText}
-          onPress={() => setMenu('coffee')}
-        >Coffee</Text>
-        <Text style={menu === 'noncoffee' ? style.categoryTextAct : style.categoryText}
-          onPress={() => setMenu('noncoffee')}
-        >Non Coffee</Text>
-        <Text style={menu === 'food' ? style.categoryTextAct : style.categoryText}
-          onPress={() => setMenu('food')}
-        >Food</Text>
-        <Text style={menu === 'all' ? style.categoryTextAct : style.categoryText}
-          onPress={() => setMenu('all')}
-        >All</Text>
-      </ScrollView> */}
+
       <ScrollView style={style.productContainer} showsHorizontalScrollIndicator={false}>
+        {userData.roles === 'admin' ?
+          <View style={style.adminContainer}>
+            <Pressable style={style.adminBtn} onPress={() => props.navigation.navigate("NewProduct")}>
+              <Text style={style.adminTxt}>New Product</Text>
+            </Pressable>
+            <Pressable style={style.adminBtn} onPress={() => props.navigation.navigate("NewPromo")}>
+              <Text style={style.adminTxt}>New Promo</Text>
+            </Pressable>
+          </View>
+          : <></>}
         <View style={style.subtitleContainer}>
           <Text style={style.categoryTitle}>Favorite Products</Text>
-          <Text style={style.seeAll} 
-          onPress={()=> props.navigation.navigate('AllProduct', {category: 'favorite'})}
+          <Text style={style.seeAll}
+            onPress={() => props.navigation.navigate('AllProduct', { category: 'favorite' })}
           >See more</Text>
         </View>
-        {loading.all ?
-          <ActivityIndicator size={'large'} style={style.loading}/>
+        {loading ?
+          <ActivityIndicator size={'large'} style={style.loading} />
           :
           <FlatList horizontal={true} data={product} renderItem={({ item, idx }) => (
             <ProductCard key={idx} id={item.id} name={item.name} picture={item.picture} price={item.price} {...props} />
@@ -151,11 +153,11 @@ export default function Home(props) {
         <View style={style.subtitleContainer}>
           <Text style={style.categoryTitle}>Coffee</Text>
           <Text style={style.seeAll}
-          onPress={()=> props.navigation.navigate('AllProduct', {category: 'coffee'})}
+            onPress={() => props.navigation.navigate('AllProduct', { category: 'coffee' })}
           >See more</Text>
         </View>
-        {loading.coffee ?
-          <ActivityIndicator size={'large'} style={style.loading}/>
+        {loadingCoffee ?
+          <ActivityIndicator size={'large'} style={style.loading} />
           :
           <FlatList horizontal={true} data={coffee} renderItem={({ item, idx }) => (
             <ProductCard key={idx} id={item.id} name={item.name} picture={item.picture} price={item.price} {...props} />
@@ -164,11 +166,11 @@ export default function Home(props) {
         <View style={style.subtitleContainer}>
           <Text style={style.categoryTitle}>Non Coffee</Text>
           <Text style={style.seeAll}
-          onPress={()=> props.navigation.navigate('AllProduct', {category: 'noncoffee'})}
+            onPress={() => props.navigation.navigate('AllProduct', { category: 'noncoffee' })}
           >See more</Text>
         </View>
-        {loading.nonCoffee ?
-          <ActivityIndicator size={'large'} style={style.loading}/>
+        {loadingNonCoffee ?
+          <ActivityIndicator size={'large'} style={style.loading} />
           :
           <FlatList horizontal={true} data={nonCoffee} renderItem={({ item, idx }) => (
             <ProductCard key={idx} id={item.id} name={item.name} picture={item.picture} price={item.price} {...props} />
@@ -177,18 +179,81 @@ export default function Home(props) {
         <View style={style.subtitleContainer}>
           <Text style={style.categoryTitle}>Food</Text>
           <Text style={style.seeAll}
-          onPress={()=> props.navigation.navigate('AllProduct', {category: 'food'})}
+            onPress={() => props.navigation.navigate('AllProduct', { category: 'food' })}
           >See more</Text>
         </View>
-        {loading.food ?
-          <ActivityIndicator size={'large'} style={style.loading}/>
+        {loadingFood ?
+          <ActivityIndicator size={'large'} style={style.loading} />
           :
           <FlatList horizontal={true} data={food} renderItem={({ item, idx }) => (
             <ProductCard key={idx} id={item.id} name={item.name} picture={item.picture} price={item.price} {...props} />
           )} />
         }
-        <View style={{height: 200}}></View>
+        <View style={{ height: 200 }}></View>
       </ScrollView>
+      <Modal visible={show} transparent={true}>
+        <Pressable style={{ backgroundColor: '#000000', flex: 1, opacity: 0.5 }} onPress={() => setShow(false)}>
+        </Pressable>
+        <View style={{
+          backgroundColor: '#ffffff',
+          position: 'absolute',
+          width: '60%',
+          height: '20%',
+          borderRadius: 10,
+          top: '40%',
+          left: '20%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-around',
+          paddingVertical: 20
+        }}>
+
+          <Text style={{
+            fontFamily: 'Poppins-Bold',
+            fontSize: 20,
+            color: '#000000',
+            textAlign: 'center'
+          }}>
+            Are You Sure?
+          </Text>
+          <View style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginHorizontal: '10%'
+          }}>
+            <Pressable style={{
+              backgroundColor: '#6A4029',
+              paddingVertical: 2.5,
+              paddingHorizontal: '5%',
+              borderRadius: 10
+            }} onPress={() => {
+              dispatch(logoutAction())
+              props.navigation.replace("Login")
+            }}>
+              <Text style={{
+                fontFamily: 'Poppins-SemiBold',
+                fontSize: 18,
+                color: '#ffffff',
+                textAlign: 'center',
+              }}>Logout</Text>
+            </Pressable>
+            <Pressable style={{
+              backgroundColor: '#FFBA33',
+              paddingVertical: 2.5,
+              paddingHorizontal: '5%',
+              borderRadius: 10
+            }} onPress={() => setShow(false)}>
+              <Text style={{
+                fontFamily: 'Poppins-SemiBold',
+                fontSize: 18,
+                color: '#6A4029',
+                textAlign: 'center'
+              }}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   )
 }

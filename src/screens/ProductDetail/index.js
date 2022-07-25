@@ -1,7 +1,8 @@
-import { View, Text, Image, Pressable } from 'react-native'
+import { View, Text, Image, Pressable, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
+import Toast from 'react-native-toast-message'
 import { REACT_APP_BE_HOST } from '@env'
 import Header from '../../components/Header'
 import style from './style'
@@ -14,6 +15,7 @@ export default function ProductDetail(props) {
   const [size, setSize] = useState('')
   console.log(props.route.params.id)
   const dispatch = useDispatch()
+  const { userData } = useSelector(state => state.user)
 
   const getProductDetail = async () => {
     try {
@@ -30,38 +32,60 @@ export default function ProductDetail(props) {
     }
   }
   useEffect(() => {
+    setSize('')
     getProductDetail()
-  }, [props.route.params.id])
+  }, [props.route.params.id, props.route.params.edited])
+
+  const errorToast = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Please input product size!'
+    })
+  }
 
   const addCartHandler = () => {
-    const newProduct = {...product, size}
+    if (!size) {
+      return errorToast()
+    }
+    const newProduct = { ...product, size }
     dispatch(addProductAction(newProduct))
     props.navigation.navigate("Cart")
   }
 
+  // console.log(REACT_APP_BE_HOST)
   return (
     <>
       <Header {...props} />
-      <View style={style.container}>
-        <Image source={product.picture ? { uri: product.picture } : require('../../assets/img/hazelnut.png')} style={style.img} />
-        <Text style={style.name}>{product.name ? product.name : 'Cold Brew'}</Text>
-        <Text style={style.price}>{product.price ? currencyFormatter.format(product.price) : 'IDR 30.000'}</Text>
-        <View>
-          <Text style={style.descTitle}>Description</Text>
-          <Text style={style.desc}>{product.description ? product.description : 'Description space'}</Text>
-        </View>
-        <View>
-          <Text style={style.sizeTitle}>Choose a size</Text>
-          <View style={style.sizeContainer}>
-              <Text style={size === 'R'? style.sizeTextActive : style.sizeText} onPress={()=>setSize('R')}>R</Text>
-              <Text style={size === 'L'? style.sizeTextActive : style.sizeText} onPress={()=>setSize('L')}>L</Text>
-              <Text style={size === 'XL'? style.sizeTextActive : style.sizeText} onPress={()=>setSize('XL')}>XL</Text>
+      {loading ?
+        <ActivityIndicator size={50} style={{ flex: 1 }} />
+        :
+        <View style={style.container}>
+          <Image source={product.picture ? { uri: product.picture } : require('../../assets/img/hazelnut.png')} style={style.img} />
+          <Text style={style.name}>{product.name ? product.name : 'Cold Brew'}</Text>
+          <Text style={style.price}>{product.price ? currencyFormatter.format(product.price) : 'IDR 30.000'}</Text>
+          <View>
+            <Text style={style.descTitle}>Description</Text>
+            <Text style={style.desc}>{product.description ? product.description : 'Description space'}</Text>
           </View>
+          <View>
+            <Text style={style.sizeTitle}>Choose a size</Text>
+            <View style={style.sizeContainer}>
+              <Text style={size === 'R' ? style.sizeTextActive : style.sizeText} onPress={() => setSize('R')}>R</Text>
+              <Text style={size === 'L' ? style.sizeTextActive : style.sizeText} onPress={() => setSize('L')}>L</Text>
+              <Text style={size === 'XL' ? style.sizeTextActive : style.sizeText} onPress={() => setSize('XL')}>XL</Text>
+            </View>
+          </View>
+          {userData.roles === 'admin' ?
+            <Pressable style={style.btnContainer} onPress={() => props.navigation.navigate('EditProduct', { id: props.route.params.id })}>
+              <Text style={style.btnText}>Edit Product</Text>
+            </Pressable>
+            :
+            <Pressable style={style.btnContainer} onPress={addCartHandler}>
+              <Text style={style.btnText}>Add to cart</Text>
+            </Pressable>
+          }
         </View>
-        <Pressable style={style.btnContainer} onPress={addCartHandler}>
-          <Text style={style.btnText}>Add to cart</Text>
-        </Pressable>
-      </View>
+      }
     </>
   )
 }

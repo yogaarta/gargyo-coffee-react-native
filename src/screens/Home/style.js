@@ -77,4 +77,24 @@ export default StyleSheet.create({
     marginHorizontal: '5%',
     // paddingBottom: 500
   },
+  adminContainer:{
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: '5%'
+  },
+  adminBtn:{
+    backgroundColor: '#6A4029',
+    width: '45%',
+    height: 50,
+    borderRadius: 10,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  adminTxt: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 16,
+    color: '#ffffff'
+  }
 })

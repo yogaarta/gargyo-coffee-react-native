@@ -4,6 +4,7 @@ import axios from 'axios'
 export const doLogin = (body) => {
   return axios.post(`${REACT_APP_BE_HOST}/auth`, body)
 }
+console.log(REACT_APP_BE_HOST)
 
 export const doRegister = (body) => {
   return axios.post(`${REACT_APP_BE_HOST}/auth/new`, body)

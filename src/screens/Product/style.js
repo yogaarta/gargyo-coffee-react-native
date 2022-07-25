@@ -17,6 +17,7 @@ export default StyleSheet.create({
   searchInput: {
     paddingVertical: 5,
     fontFamily: 'Poppins-Bold',
+    color: '#000000',
     fontSize: 16,
     width: '100%',
     // textAlignVertical: 'auto'
@@ -54,4 +55,8 @@ export default StyleSheet.create({
     fontSize: 15,
     color: '#9A9A9D'
   },
+  loading: {
+    marginTop: 200,
+    
+  }
 })

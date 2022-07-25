@@ -20,6 +20,22 @@ export default StyleSheet.create({
     paddingTop: '5%',
     paddingBottom: '5%'
   },
+  splashBg: {
+    backgroundColor: '#6A4029',
+    opacity: 10,
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: '5%',
+    paddingBottom: '5%'
+  },
+  splashTitle: {
+    color: '#ffffff',
+    fontFamily: 'Poppins-Bold',
+    textAlign: 'center',
+    fontSize: 50,
+  },
   title: {
     color: 'white',
     fontFamily: 'Poppins-Bold',

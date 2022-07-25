@@ -8,6 +8,7 @@ export default StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingHorizontal: '5%',
+    marginBottom: 10
   },
   cardProduct: {
     width: 120,
@@ -89,7 +90,7 @@ export default StyleSheet.create({
     flexDirection: 'column',
     alignSelf: 'center',
     width: '80%',
-    marginVertical: 40
+    marginVertical: 20
   },
   infoRow: {
     marginVertical: 5,
@@ -156,5 +157,72 @@ export default StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     fontSize: 17,
     color: '#ffffff'
+  },
+  promoCard: {
+    paddingHorizontal: '5%',
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: '#88B788',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+    borderWidth: 4,
+    borderColor: '#88B788'
+  },
+  promoCard2: {
+    paddingHorizontal: '5%',
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: '#88B788',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+    borderWidth: 4,
+    borderColor: '#895537'
+  },
+  promoCard3: {
+    paddingHorizontal: '5%',
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: 'red',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10
+  },
+  colorCard1: {
+    backgroundColor: '#88B788'
+  },
+  txtContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '60%',
+    paddingHorizontal: '5%'
+  },
+  pname: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 20,
+    color: '#000000',
+    marginBottom: 10,
+    textAlign: 'center'
+  },
+  btmTxt: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  date: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 16,
+    color: '#000000',
+  },
+  discount: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 20,
+    color: '#000000',
+    textAlign: 'right'
   }
 })

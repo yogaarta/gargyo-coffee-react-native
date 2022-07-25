@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { REACT_APP_BE_HOST } from '@env'
-
+import { CommonActions } from '@react-navigation/native';
 import style from './style'
 import { doLogin } from '../../modules/auth'
 import { loginAction, logoutAction } from '../../redux/actionCreators/auth'
@@ -24,7 +24,7 @@ export default function Login({ navigation }) {
 
   const showToast = () => {
     ToastAndroid.show('gabisa login nih', ToastAndroid.SHORT)
-    navigation.navigate('Drawer')
+    navigation.replace('Drawer')
   }
   const successToast = () => {
     Toast.show({
@@ -47,7 +47,7 @@ export default function Login({ navigation }) {
   useEffect(() => {
     if (isSuccess) {
       successToast()
-      navigation.navigate('Drawer')
+      navigation.replace('Drawer')
     }
     if (isSuccess === false) {
       errorToast()
@@ -65,10 +65,10 @@ export default function Login({ navigation }) {
             onChange={(e) => { setBody({ ...body, email: e.nativeEvent.text }) }}
           />
           <View style={style.passContainer}>
-          <TextInput style={style.inputPass} placeholder='Enter your password' placeholderTextColor='#cccccc' secureTextEntry={showPass ? false : true}
-            onChange={(e) => { setBody({ ...body, pass: e.nativeEvent.text }) }}
-          />
-<Ionicons name={showPass ? 'eye-outline' : 'eye-off-outline'} style={style.eye} onPress={() => setShowPass(!showPass)} />
+            <TextInput style={style.inputPass} placeholder='Enter your password' placeholderTextColor='#cccccc' secureTextEntry={showPass ? false : true}
+              onChange={(e) => { setBody({ ...body, pass: e.nativeEvent.text }) }}
+            />
+            <Ionicons name={showPass ? 'eye-outline' : 'eye-off-outline'} style={style.eye} onPress={() => setShowPass(!showPass)} />
           </View>
           <Pressable onPress={() => navigation.navigate('Forgot')}>
             <Text style={style.forgot}>Forgot password?</Text>

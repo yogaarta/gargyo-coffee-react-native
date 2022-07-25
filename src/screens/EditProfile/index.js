@@ -1,4 +1,4 @@
-import { View, Text, Image, TextInput, Pressable, ActivityIndicator } from 'react-native'
+import { View, Text, Image, TextInput, Pressable, ActivityIndicator, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import DatePicker from 'react-native-date-picker'
@@ -7,7 +7,7 @@ import Toast from 'react-native-toast-message'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import ImagePicker from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import Header from '../../components/Header'
 import style from './style'
 import moment from 'moment'
@@ -30,7 +30,8 @@ export default function EditProfile(props) {
   const [loading, setLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [gender, setGender] = useState('')
-  const [data, setData] = useState({})
+  const [show, setShow] = useState(false)
+  const [data, setData] = useState(null)
   // const [body, setBody] = useState({...userData})
   const [body, setBody] = useState({
     display_name: '',
@@ -56,70 +57,110 @@ export default function EditProfile(props) {
       text1: 'Update Success'
     })
   }
-
-  // image Picker start
-  const chooseImage = () => {
-    let options = {
-      title: 'Select Image',
-      customButtons: [
-        { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
-      ],
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-        alert(response.customButton);
-      } else {
-        const source = { uri: response.uri };
-
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-        // alert(JSON.stringify(response));s
-        console.log('response', JSON.stringify(response));
-        setData({
-          filePath: response,
-          fileData: response.data,
-          fileUri: response.uri
-        });
-      }
-    });
+  const errorToast = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Update failed'
+    })
   }
 
-  // renderFileData() {
-  //   if (this.state.fileData) {
-  //     return <Image source={{ uri: 'data:image/jpeg;base64,' + this.state.fileData }}
-  //       style={styles.images}
+  // image Picker start
+  const chooseImage = async () => {
+    const options = {
+      selectionLimit: 1,
+      mediaType: 'photo',
+      includeBase64: false,
+    };
+    // ImagePicker.launchImageLibrary(options, (response) => {
+    //   console.log('Response = ', response);
+
+    //   if (response.didCancel) {
+    //     console.log('User cancelled image picker');
+    //   } else if (response.error) {
+    //     console.log('ImagePicker Error: ', response.error);
+    //   } else if (response.customButton) {
+    //     console.log('User tapped custom button: ', response.customButton);
+    //     alert(response.customButton);
+    //   } else {
+    //     const source = { uri: response.uri };
+
+    //     // You can also display the image using data:
+    //     // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+    //     // alert(JSON.stringify(response));
+    //     console.log('response', JSON.stringify(response));
+    //     setData({
+    //       filePath: response,
+    //       fileData: response.data,
+    //       fileUri: response.uri
+    //     });
+    //   }
+    // });
+    try {
+      setShow(false)
+      const result = await launchImageLibrary(options)
+      setData({
+        name: result.assets[0].fileName,
+        size: result.assets[0].fileSize,
+        type: result.assets[0].type,
+        uri: result.assets[0].uri,
+        height: result.assets[0].height,
+        width: result.assets[0].width
+      })
+      console.log(result.assets[0])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const useCamera = async () => {
+    const options = {
+      selectionLimit: 1,
+      mediaType: 'photo',
+      includeBase64: false,
+    };
+
+    try {
+      setShow(false)
+      const result = await launchCamera(options)
+      setData({
+        name: result.assets[0].fileName,
+        size: result.assets[0].fileSize,
+        type: result.assets[0].type,
+        uri: result.assets[0].uri,
+        height: result.assets[0].height,
+        width: result.assets[0].width
+      })
+      console.log(result.assets[0])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // function renderFileData() {
+  //   if (data.base64) {
+  //     return <Image source={{ uri: 'data:image/jpeg;base64,' + data.base64}}
+  //       style={style.profpict}
   //     />
   //   } else {
-  //     return <Image source={require('./assets/dummy.png')}
-  //       style={styles.images}
+  //     return <Image source={require('../../assets/img/profpict.png')}
+  //       style={style.profpict}
   //     />
   //   }
   // }
 
-  // renderFileUri() {
-  //   if (this.state.fileUri) {
-  //     return <Image
-  //       source={{ uri: this.state.fileUri }}
-  //       style={styles.images}
-  //     />
-  //   } else {
-  //     return <Image
-  //       source={require('./assets/galeryImages.jpg')}
-  //       style={styles.images}
-  //     />
-  //   }
-  // }
+  function renderFileUri() {
+    if (data.uri) {
+      return <Image
+        source={{ uri: data.uri }}
+        style={style.profpict}
+      />
+    } else {
+      return <Image
+        source={require('../../assets/img/profpict.png')}
+        style={style.profpict}
+      />
+    }
+  }
   // image picker end
 
   const updateHandler = async () => {
@@ -127,7 +168,7 @@ export default function EditProfile(props) {
       setLoading(true)
       const { mobile_number, display_name, address, birthday, gender, profile_picture, email } = body
       let newBody = new FormData()
-      newBody.append('profile_picture', profile_picture);
+      newBody.append('profile_picture', data);
       newBody.append('mobile_number', mobile_number);
       newBody.append('email', email);
       newBody.append('display_name', display_name);
@@ -137,7 +178,8 @@ export default function EditProfile(props) {
 
       const config = { headers: { Authorization: `Bearer ${userInfo.token}`, "content-type": "multipart/form-data" } }
       const response = await axios.patch(`${REACT_APP_BE_HOST}/users`, newBody, config)
-      console.log(response)
+      // console.log(response)
+      dispatch(getUserAction(userInfo.token))
       console.log('SUCCESS')
       setIsSuccess(true)
       successToast()
@@ -145,12 +187,13 @@ export default function EditProfile(props) {
       props.navigation.navigate('Profile')
     } catch (error) {
       console.log('FAILED')
+      errorToast()
       console.log(error)
       setLoading(false)
     }
   }
   useEffect(() => {
-    if(isSuccess){
+    if (isSuccess) {
       dispatch(getUserAction(userInfo.token))
     }
   }, [isSuccess])
@@ -160,8 +203,10 @@ export default function EditProfile(props) {
       <View style={style.container}>
         <Text style={style.title}>Edit Profile</Text>
         <View style={style.imgContainer}>
-          <Image source={body.profile_picture ? {uri: body.profile_picture} : require('../../assets/img/profpict.png')} style={style.profpict} />
-          <Pressable style={style.pencilContainer}>
+          {/* {renderFileData()} */}
+          {/* {renderFileUri()} */}
+          <Image source={data && data.uri ? { uri: data.uri } : body.profile_picture ? { uri: body.profile_picture } : require('../../assets/img/profpict.png')} style={style.profpict} />
+          <Pressable style={style.pencilContainer} onPress={() => setShow(true)}>
             <SimpleLineIcons name='pencil' size={20} color={'#ffffff'} style={style.pencil} />
           </Pressable>
         </View>
@@ -210,18 +255,54 @@ export default function EditProfile(props) {
           <TextInput placeholder='Input Your Address' style={style.input} value={body.address} onChange={(e) => setBody({ ...body, address: e.nativeEvent.text })} />
           <View style={style.border}></View>
         </View>
-        {loading ? 
-        <Pressable style={style.saveBtn}>
-          <ActivityIndicator />
-        </Pressable>
-        :
-        <Pressable style={style.saveBtn} onPress={updateHandler}>
-          <Text style={style.saveTxt}>
-            Save and Update
-          </Text>
-        </Pressable>
+        {loading ?
+          <Pressable style={style.saveBtn}>
+            <ActivityIndicator />
+          </Pressable>
+          :
+          <Pressable style={style.saveBtn} onPress={updateHandler}>
+            <Text style={style.saveTxt}>
+              Save and Update
+            </Text>
+          </Pressable>
         }
       </View>
+      <Modal visible={show} transparent={true} animationType={'fade'}>
+        <Pressable style={{ backgroundColor: '#000000', flex: 1, opacity: 0.5 }} onPress={() => setShow(false)}>
+        </Pressable>
+        <View style={{
+          backgroundColor: '#ffffff',
+          paddingVertical: 20,
+          paddingHorizontal: '10%',
+          position: 'relative',
+          // top: '30%', left: '20%', 
+          height: '18%', width: '100%',
+          display: 'flex', flexDirection: 'row',
+          alignItems: 'center', justifyContent: 'space-between', 
+          borderRadius: 10
+        }}>
+          <Pressable style={{
+            backgroundColor: '#FFBA33',
+            width: '30%',
+            height: 70,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center', borderRadius: 10
+          }} onPress={chooseImage}>
+            <FontAwesome name='photo' size={30} color={'#ffffff'} />
+          </Pressable>
+          <Pressable style={{
+            backgroundColor: '#6A4029',
+            width: '30%',
+            height: 70,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center', borderRadius: 10
+          }} onPress={useCamera}>
+            <FontAwesome name='camera' size={30} color={'#ffffff'} />
+          </Pressable>
+        </View>
+      </Modal>
       <Toast />
     </>
   )
