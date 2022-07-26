@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Toast from 'react-native-toast-message'
 import Octicons from 'react-native-vector-icons/Octicons'
+import Fontisto from 'react-native-vector-icons/Fontisto'
 import Header from '../../components/Header'
 import style from './style'
 import { currencyFormatter } from '../../helpers/formatter'
@@ -52,15 +53,15 @@ export default function Delivery(props) {
         </View>
         <View style={style.addressCard}>
           <Text style={style.delivery} onPress={() => setDelivery('delivery')}>
-            <Octicons name={delivery === 'delivery' ? 'dot-fill' : 'dot'} size={15} color={'#6A4029'} /> Door delivery
+            <Fontisto name={delivery === 'delivery' ? 'radio-btn-active' : 'radio-btn-passive'} size={15} color={'#6A4029'} /> Door delivery
           </Text>
           <View style={style.border}></View>
           <Text style={style.delivery} onPress={() => setDelivery('pickup')}>
-            <Octicons name={delivery === 'pickup' ? 'dot-fill' : 'dot'} size={15} color={'#6A4029'} /> Pick up at store
+            <Fontisto name={delivery === 'pickup' ? 'radio-btn-active' : 'radio-btn-passive'} size={15} color={'#6A4029'} /> Pick up at store
           </Text>
           <View style={style.border}></View>
           <Text style={style.delivery} onPress={() => setDelivery('dinein')}>
-            <Octicons name={delivery === 'dinein' ? 'dot-fill' : 'dot'} size={15} color={'#6A4029'} /> Dine in
+            <Fontisto name={delivery === 'dinein' ? 'radio-btn-active' : 'radio-btn-passive'} size={15} color={'#6A4029'} /> Dine in
           </Text>
         </View>
         <View style={style.totalContainer}>

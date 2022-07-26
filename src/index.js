@@ -21,6 +21,7 @@ import EditProduct from './screens/EditProduct'
 import NewPromo from './screens/NewPromo'
 import ChangePass from './screens/ChangePass'
 import EditPromo from './screens/EditPromo'
+import Dashboard from './screens/Dashboard'
 
 const Drawer = createDrawerNavigator()
 
@@ -42,6 +43,7 @@ const DrawerNav = () => {
         <Drawer.Screen name='EditProduct' component={EditProduct} options={{ headerShown: false }}/>
         <Drawer.Screen name='EditPromo' component={EditPromo} options={{ headerShown: false }}/>
         <Drawer.Screen name='ChangePass' component={ChangePass} options={{ headerShown: false }}/>
+        <Drawer.Screen name='Dashboard' component={Dashboard} options={{ headerShown: false }}/>
       </Drawer.Navigator>
   )
 }
