@@ -5,6 +5,7 @@ import Toast from 'react-native-toast-message'
 import { REACT_APP_BE_HOST } from '@env'
 import style from './style'
 import Octicons from 'react-native-vector-icons/Octicons'
+import Fontisto from 'react-native-vector-icons/Fontisto'
 import Header from '../../components/Header'
 import { currencyFormatter } from '../../helpers/formatter'
 import { clearCartAction } from '../../redux/actionCreators/cart'
@@ -56,8 +57,13 @@ export default function Payment(props) {
         user_id: userData.id,
         payment_method: payment,
         delivery_method: product.delivery,
-        promo_id: product.promo.id ? product.promo.id : null
+        promo_id: product.promo.id ? product.promo.id : null,
+        display_name: userData.display_name
+        // receiver: 'fcO2OT3KSRyPOyrY1t5uAN:APA91bEX7gKjrqDIde8ig9-lG0zSJAcQfdXoC6m-i0H8m-SbTRhfxlcu6yCB3Lexd2ZgXXit1HvXyjg2ZGzxDdnjN4VFyxknHLZJ2NNdYgCE4pGvKJ6ZbsNzYMOeMmcO4SQM-dGbIUxb',
+        // message: `User ${userData.display_name} successfuly buy ${product.name}`,
+        // title: `Another Transaction Has Been Done`
       }
+      console.log(body)
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } }
       const response = await axios.post(`${REACT_APP_BE_HOST}/transactions`, body, config)
       console.log(response)
@@ -69,7 +75,7 @@ export default function Payment(props) {
       setLoading(false)
       props.navigation.navigate("Home")
     } catch (error) {
-      console.log(error)
+      console.log(error.response)
       setIsSuccess(false)
       console.log('ERROR')
       setLoading(false)
@@ -111,15 +117,15 @@ export default function Payment(props) {
         </View>
         <View style={style.methodCard}>
           <Text style={style.delivery} onPress={() => setPayment('card')}>
-            <Octicons name={payment === 'card' ? 'dot-fill' : 'dot'} size={15} color={'#6A4029'} /> Card
+            <Fontisto name={payment === 'card' ? 'radio-btn-active' : 'radio-btn-passive'} size={15} color={'#6A4029'} /> Card
           </Text>
           <View style={style.border}></View>
           <Text style={style.delivery} onPress={() => setPayment('bank')}>
-            <Octicons name={payment === 'bank' ? 'dot-fill' : 'dot'} size={15} color={'#6A4029'} /> Bank account
+            <Fontisto name={payment === 'bank' ? 'radio-btn-active' : 'radio-btn-passive'} size={15} color={'#6A4029'} /> Bank account
           </Text>
           <View style={style.border}></View>
           <Text style={style.delivery} onPress={() => setPayment('cod')}>
-            <Octicons name={payment === 'cod' ? 'dot-fill' : 'dot'} size={15} color={'#6A4029'} /> Cash on delivery
+            <Fontisto name={payment === 'cod' ? 'radio-btn-active' : 'radio-btn-passive'} size={15} color={'#6A4029'} /> Cash on delivery
           </Text>
         </View>
         <View style={style.totalContainer}>

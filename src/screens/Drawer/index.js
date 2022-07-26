@@ -52,10 +52,10 @@ function MyDrawer(props) {
             <Text style={style.menuText}>All menu</Text>
           </Pressable>
           {userData.roles === 'admin' ?
-            <View style={style.menuList}>
+            <Pressable style={style.menuList} onPress={() => props.navigation.navigate('Dashboard')}>
               <Material name='newspaper-variant-outline' size={35} color='#6A4029' />
               <Text style={style.menuText}>Sales Report</Text>
-            </View>
+            </Pressable>
             :
             <View style={style.menuList}>
               <Ionicons name='newspaper-outline' size={35} color='#6A4029' />
