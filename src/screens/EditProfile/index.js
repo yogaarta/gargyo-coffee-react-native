@@ -239,7 +239,7 @@ export default function EditProfile(props) {
           <Text style={style.label}>Date of Birth</Text>
           <View style={style.dateInput}>
             <TextInput placeholder='Input Your Date of Birth' style={style.input} value={body.birthday} />
-            <FontAwesome name='calendar' size={20} onPress={() => setOpen(true)} />
+            <FontAwesome name='calendar' size={20} color={'#9f9f9f'} onPress={() => setOpen(true)} />
             <DatePicker modal open={open} date={body.birthday ? new Date(body.birthday) : new Date()} mode='date'
               onConfirm={date => {
                 setOpen(false)
